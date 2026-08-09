@@ -49,7 +49,7 @@ SPDX-License-Identifier: MIT
       <li><a href="#relative-references-and-polymorphic-procedures">Relative references and polymorphic procedures</a></li>
       <li><a href="#a-record-type-presentation">A record type presentation</a></li>
       <li><a href="#pure-and-impure-interfaces">Pure and impure interfaces</a></li>
-      <li><a href="#error-behaviour-of-setters-and-updaters">Error behaviour of setters and updaters</a></li>
+      <li><a href="#error-behaviour-of-setters">Error behaviour of setters</a></li>
       <li>
         <a href="#normalization">Normalization</a>
         <ul>
@@ -159,9 +159,9 @@ SPDX-License-Identifier: MIT
 <p>We require implementations to provide a pure-functional interface to URIs and IRIs, but not an in-place interface. The reasoning for this is that if implementors choose data structures optimised to purely functional programming, it is more cumbersome to create an impure interface, whereas it is not as cumbersome for implementors to create a (inefficient) pure-functional interface by copying the URI or IRI before updating in-place.</p>
 <p>If an implementation provides disjoint mutable and immutable URI and IRI variants, then it is an error to call the in-place setters on an immutable variant, but the in-place variants should otherwise have equivalent error handling to the pure-functional variants.</p>
 
-<h3 id="error-behaviour-of-setters-and-updaters">Error behaviour of setters and updaters</h3>
-<p>Our design is to provide getters and setters which abstract away the internal representation, working on string representations of URI components. More generally, we suspect that existing implementations largely omit setters and updaters because preserving internal consistency is fairly cumbersome on the implementor and programmer, with validity of authority components being defined with respect to the path, and vice versa. The specific challenge is to ensure that setting a given component would not violate the URI grammar, as this may elicit a flat string representation which would have a different structure when parsed again.</p>
-<p>First, the scheme, query and fragment components do not depend on validity of other components. Setters and updaters invoke the respective parsers on the string representation to be set, and raise an error if the parse failed.</p>
+<h3 id="error-behaviour-of-setters">Error behaviour of setters</h3>
+<p>Our design is to provide getters and setters which abstract away the internal representation, working on string representations of URI components. More generally, we suspect that existing implementations largely omit setters because preserving internal consistency is fairly cumbersome on the implementor and programmer, with validity of authority components being defined with respect to the path, and vice versa. The specific challenge is to ensure that setting a given component would not violate the URI grammar, as this may elicit a flat string representation which would have a different structure when parsed again.</p>
+<p>First, the scheme, query and fragment components do not depend on validity of other components. Setters invoke the respective parsers on the string representation to be set, and raise an error if the parse failed.</p>
 <p>Second, for the path component, validity depends on whether a) any authority component is set; and b) whether we are setting it for an URI, or for a relative reference.</p>
 <ol>
   <li>If any authority component is set, then an error is raised if the target path does not begin with a slash, or is otherwise non-empty (see RFC 3986's <code>path-abempty</code> production). An error is raised if there is a parse failure.</li>
@@ -192,7 +192,7 @@ SPDX-License-Identifier: MIT
 <h4 id="path-segment-normalization">Path segment normalization</h4>
 <p>Path segment normalization is structurally identical for both URIs and IRIs. It interprets an entire path with respect to two control sequences: <code>.</code> (current working directory) and <code>..</code> (upper working directory), similar to UNIX paths. Unlike the other two normalization procedures, path segment normalization is <b>undefined for relative references</b>, because the path portion is not meaningful except during relative reference resolution.</p>
 <p>It should be noted that path segment normalization <b>is</b> defined for non-relative IRIs with relative paths, such as a URN like <code>&lt;foo:a/b/../.././../../e&gt;</code>. This is a major source of diversion between RFC 3986 implementations. This appears to arise from reusing the <code>remove-dot-segments</code> procedure as defined in RFC 3986 verbatim. In relative reference resolution, this procedure is <i>never</i> called on relative paths, only on absolute paths.</p>
-<p>For example, for the (non-relative) IRI <code>&lt;foo:a/b/../.././../../e&gt;</code>, implementations using the RFC 3986 procedure verbatim get <code>&lt;foo:/e&gt;</code>, whereas other implementations get <code>&lt;foo:e&gt;</code>. In the former camp are implementations like the Erlang/OTP system's built-in <code>uri_string</code> <a href="#erl-uri-string">[4]</a>, and Guile-RDF <a href="#guile-rdf">[6]</a>, whereas in the latter camp are implementations like Haskell's <code>network-uri</code> <a href="#hs-network-uri">[3]</a>. We are in the latter camp. A fixed <code>remove-dot-segments</code>, based on Chicken's <code>uri-common</code> library, might be implemented as follows:</p>
+<p>For example, for the (non-relative) IRI <code>&lt;foo:a/b/../.././../../e&gt;</code>, implementations using the RFC 3986 procedure verbatim get <code>&lt;foo:/e&gt;</code>, whereas other implementations get <code>&lt;foo:e&gt;</code>. In the former camp are implementations like the Erlang/OTP system's built-in <code>uri_string</code> <a href="#erl-uri-string">[4]</a>, and Guile-RDF <a href="#guile-rdf">[6]</a>, whereas in the latter camp are implementations like Haskell's <code>network-uri</code> <a href="#hs-network-uri">[3]</a> and Chicken's <code>uri-common</code> <a href="#chicken-uri-common">[10]</a> and <code>uri-generic</code> <a href="#chicken-uri-generic">[11]</a> libraries. We are in the latter camp. A fixed <code>remove-dot-segments</code>, based on Chicken's <code>uri-common</code> library, might be implemented as follows:</p>
 <pre>
 (define (remove-dot-segments path)
   (let* ([undotted
@@ -241,7 +241,7 @@ SPDX-License-Identifier: MIT
 <p>Although we support both URIs and IRIs, for brevity we primarily describe behaviour for IRIs, and omit descriptions of the equivalent procedures for URIs where they behave the same. This works because URIs and IRIs are structurally identical, with the divergence between RFC 3986 and 3987 arising from the generalisation of the character set, and the treatment of normalization.</p>
 <p>Type signatures are specified as arrows from input arguments to a single output. Multiple values are denoted <span class="type-sig">(typ ...)</span> and <span class="type-sig">()</span> denotes unit or void (equivalent to R<sup>6</sup>RS <code>(cond [#f #f])</code>).</p>
 <p>In type specifications, when we refer to <code>iri</code>, we refer to both IRIs and IRI-relative references (i.e. the <code>iri</code> type and the <code>relative-iri</code> type). We specify which specific type of IRI with either <code>non-relative-iri</code> or <code>relative-iri</code>. This is a little loose, but best reflects the use of polymorphism in this library interface.</p>
-<p>Library references are in the form <code>(srfi :275 <span class="type-sig">&lt;sub-library&gt;</span>)</code> for compatibility with R<sup>6</sup>RS library reference syntax.</p>
+<p>Library references are in the form <code>(srfi :275 <span class="type-sig">&lt;sub-library&gt;</span>)</code> consistent with SRFI 97 <a href="#srfi-97">[12]</a>.</p>
 <p>Finally, throughout this document, we enclose IRIs and URIs in angle brackets, e.g. <code>&lt;http://example.org&gt;</code>.</p>
 
 <h3 id="iri-programming-interface">IRI programming interface</h3>
@@ -287,8 +287,8 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 (iri-username+password (string->iri "//"))         → #f    #f
 (iri-username+password (string->iri "//foo@host")) → "foo" #f
   </pre>
-<p>We also provide a <a href="utilities">generic helper procedure</a> for processing strings representing users.</p>
-      
+<p>We also provide a <a href="#utilities">generic helper procedure</a> for processing strings representing users.</p>
+
 <b>Procedure:</b> <code>(iri-path-string ident)</code><span class="type-sig">: iri &rarr; string</span><br>
 <p>In contrast to <code>iri-path</code>, the <code>iri-path-string</code> procedure returns a string representation of the path, which may be the empty string.</p>
 <p>Examples:</p>
@@ -328,7 +328,6 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <b>Procedure:</b> <code>(update-iri-fragment ident str)</code><span class="type-sig">: iri &rarr; string? &rarr; iri</span><br>
 
 <p>Pure-functional setters for IRIs and relative references. Apart from <code>update-iri-port</code>, these procedures take a string, parsing it to the relevant field. It is an error to pass a string which does not conform to the RFC 3987 grammar for that component. The <code>update-iri-scheme</code> procedure is undefined for relative references, and it is an error to call it on a relative reference.</p>
-<p>The behaviour of these setters with respect to parsing of strings must be the same as the field-specific string-encoding procedures detailed <a href="#equivalence-and-conversion">below</a>, i.e. updating a given field with string input, should yield a string representation for that field identical to giving this input to the corresponding procedure above.</p>
 
 <b>Procedure:</b> <code>(update-iri-path ident path)</code><span class="type-sig">: iri &rarr; path | string? &rarr; iri</span><br>
 <p>Update an IRI path with either a path object or a string representation. If a string is given, then it must be permissible given the presence of an authority and whether the IRI is a relative reference, otherwise an error is raised with the path as irritant.</p>
@@ -365,9 +364,9 @@ example-IRI → &lt;/ex#IRI&gt;
 <p>Holds true if the two arguments are IRIs and their fields are equal, or if the two arguments are relative references and their fields are equal. An IRI is never equal to a relative reference, and vice versa. It is an error to call this procedure when either argument is not an IRI or relative reference.</p>
 
 <h3 id="uri-programming-interface">URI programming interface</h3>
-<b>Library:</b> <code>(srfi :275 uri)</code><br>
+<b>Library: <code>(srfi :275 uri)</code></b><br>
 
-<p>Identical programming interfaces to that of IRIs are given for URIs, with procedures and error messages renaming referencing <code>uri</code> instead of <code>iri</code>. The structure of a URI or URI-relative reference is identical. The programming interface differs in the character set permissible within an URI, i.e. <code>string->uri</code> signals an appropriate error, as do the updaters like <code>update-uri-host</code>.</p>
+<p>Identical programming interfaces to that of IRIs are given for URIs, with procedures and error messages renaming referencing <code>uri</code> instead of <code>iri</code>. The structure of a URI or URI-relative reference is identical. The programming interface differs in the character set permissible within an URI, i.e. <code>string->uri</code> signals an appropriate error, as do the setters like <code>update-uri-host</code>.</p>
 
 <h3 id="relative-reference-resolution">Relative reference resolution</h3>
 <h4 id="library-srfi-275-normalize">Library: <code>(srfi :275 normalize)</code></h4>
@@ -600,7 +599,7 @@ example-IRI → &lt;/ex#IRI&gt;
 
 <b>Procedure:</b> <code>(string->rfc-absolute-path str)</code><span class="type-sig">: string &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(string->rfc-absolute-path str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; relative-path</span><br>
-<p>Helper procedure where the final optional argument to <code>string->relative-path</code> is set to <code>#t</code>, meaning that an error is raised for paths which do not correspond to RFC 3986's <code>path-absolute</code>.</p>
+<p>Helper procedure where the final optional argument to <code>string->absolute-path</code> is set to <code>#t</code>, meaning that an error is raised for paths which do not correspond to RFC 3986's <code>path-absolute</code>.</p>
 
 <b>Procedure:</b> <code>(vector->relative-path str)</code><span class="type-sig">: vector(string) &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(vector->relative-path str escape-these)</code><span class="type-sig">: vector(string) &rarr; char-set &rarr; relative-path</span><br>
@@ -1043,9 +1042,9 @@ example-IRI → &lt;/ex#IRI&gt;
 <h4 id="reference-resolution">Relative reference resolution (<code>resolve-iri-reference</code> and <code>resolve-uri-reference</code>)</h4>
 <p>The following RDF 1.1 Turtle test cases for IRI resolution <i>must</i> succeed. These tests are based on those of RFC 3986, and are structured as triples in which the subject and predicate components are absolute IRIs (URNs), but where the object component is a relative IRI. A base IRI is declared at the top of the Turtle (<code>.ttl</code>) file, and the corresponding N-Triples (<code>.nt</code>) file lists the resolved triples. In the SRFI 275 sample implementation, we inline these tests, with the objects extracted and resolved against the base IRI explicitly.</p>
   <ol>
-    <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-01.ttl">IRI-resolution-01.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-01.nt">IRI-resolution-01.nt</a>  (base IRI <code>&lt;http://a/bb/ccc/d;p?q&gt;</code>)</li>
-    <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-02.ttl">IRI-resolution-02.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-02.nt">IRI-resolution-02.nt</a>  (base IRI <code>&lt;http://a/bb/ccc/d/&gt;</code>)</li>
-    <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.ttl">IRI-resolution-07.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.nt">IRI-resolution-07.nt</a>  (base IRI <code>&lt;file:///a/bb/ccc/d;p?q&gt;</code>)</li>
+    <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-01.ttl">IRI-resolution-01.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-01.nt">IRI-resolution-01.nt</a> (with base IRI <code>&lt;http://a/bb/ccc/d;p?q&gt;</code>)</li>
+    <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-02.ttl">IRI-resolution-02.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-02.nt">IRI-resolution-02.nt</a> (with base IRI <code>&lt;http://a/bb/ccc/d/&gt;</code>)</li>
+    <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.ttl">IRI-resolution-07.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.nt">IRI-resolution-07.nt</a> (with base IRI <code>&lt;file:///a/bb/ccc/d;p?q&gt;</code>)</li>
     <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-08.ttl">IRI-resolution-08.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-08.nt">IRI-resolution-08.nt</a></li>
   </ol>
 </p>
@@ -1116,7 +1115,7 @@ example-IRI → &lt;/ex#IRI&gt;
   <dd>"a%A9"</dd>
 </dl>
 
-<p>Additionally, we require that these sequences are rejected by the different parsers, as well as updaters for IRI and URI components (e.g. <code>update-iri-host</code>). The <a href="#utilities"><code>utf8->string/raise</code> procedure</a> is provided for detecting these sequences in external code.</p>
+<p>Additionally, we require that these sequences are rejected by the different parsers, as well as setters for IRI and URI components (e.g. <code>update-iri-host</code>). The <a href="#utilities"><code>utf8->string/raise</code> procedure</a> is provided for detecting these sequences in external code.</p>
 
 <h4 id="ip-literal-processing">IP literal processing</h4>
 <p>We expect the following edge-cases to have the corresponding hostname verbatim:</p>
@@ -1276,7 +1275,8 @@ example-IRI → &lt;/ex#IRI&gt;
 <li>[8] <span id="srfi-160">John Cowan, Shiro Kawai, 2019. <a href="https://srfi.schemers.org/srfi-160/">SRFI 160: Homogenous numeric vector libraries</a></span></li>
 <li>[9] <span id="srfi-262">Daphne Preston-Kendal, 2025 (draft). <a href="https://srfi.schemers.org/srfi-262/">SRFI 262: Extensible pattern-matcher</a></span></li>
 <li>[10] <span id="chicken-uri-common">Peter Bex, 2008. <a href="https://wiki.call-cc.org/eggref/5/uri-common"><code>uri-common</code></a></span></li>
-<li>[11] <span id="chicken-uri-generic">Ivan Raikov, Peter Bex, Seth Alves, 2008. <a href="https://wiki.call-cc.org/eggref/5/uri-generic"><code>uri-generic</code></a></span></li></ul>
+<li>[11] <span id="chicken-uri-generic">Ivan Raikov, Peter Bex, Seth Alves, 2008. <a href="https://wiki.call-cc.org/eggref/5/uri-generic"><code>uri-generic</code></a></span></li>
+<li>[12] <span id="srfi-97">David Van Horn, 2008. <a href="https://srfi.schemers.org/srfi-97/">SRFI 97: SRFI Libraries</a></span></li></ul>
 
 <h2 id="acknowledgements">Acknowledgements</h2>
 
