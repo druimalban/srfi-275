@@ -506,7 +506,7 @@ example-IRI → &lt;/ex#IRI&gt;
 <b>Procedure:</b> <code>(absolute-path? path)</code><span class="type-sig">: any &rarr; boolean</span><br>
 <p>Two path variants with a common internal segment structure, tagged with whether there is a leading slash.</p>
 
-<b>Procedure:</b> <code>(path-segments path)</code><span class="type-sig">: path &rarr; &rarr; vector(string)</span><br>
+<b>Procedure:</b> <code>(path-segments path)</code><span class="type-sig">: path &rarr; vector(string)</span><br>
 <b>Procedure:</b> <code>(path-segments path decode-these)</code><span class="type-sig">: path &rarr; char-set &rarr; vector(string)</span><br>
 <p>The common <code>path-segments</code> procedure retrieves the internal segment encoding as a vector of (string) segments. If a character set is provided as an optional argument to <code>path-segments</code>, then percent-encoded escape sequences corresponding to that character set will be decoded.</p>
 
@@ -586,7 +586,7 @@ example-IRI → &lt;/ex#IRI&gt;
 <b>Procedure:</b> <code>(string->relative-path str)</code><span class="type-sig">: string &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(string->relative-path str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(string->relative-path str escape-these noscheme?)</code><span class="type-sig">: string &rarr; char-set &rarr; boolean &rarr; relative-path</span><br>
-<p>Convert a string to a relative path. If a character is within the optional character set argument, then it will be escaped, and if the additional optional <code>noscheme?</code> argument is provided and holds true, then any colon in the first segment will be escaped. If the path has a leading slash, then an error is raised with the input string as irritant.</p>
+<p>Convert a string to a relative path. If a character is within the optional character set argument, then it will be escaped, and if the additional optional <code>noscheme?</code> argument is provided and holds true, then the path output will be prefixed with ‘./’. If the path has a leading slash, then an error is raised with the input string as irritant.</p>
 
 <b>Procedure:</b> <code>(string->absolute-path str)</code><span class="type-sig">: string &rarr; absolute-path</span><br>
 <b>Procedure:</b> <code>(string->absolute-path str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; absolute-path</span><br>
@@ -595,7 +595,7 @@ example-IRI → &lt;/ex#IRI&gt;
 
 <b>Procedure:</b> <code>(string->rfc-path-noscheme str)</code><span class="type-sig">: string &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(string->rfc-path-noscheme str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; relative-path</span><br>
-<p>Helper procedure where the final optional argument to <code>string->relative-path</code> is set to <code>#t</code>, meaning that an error is raised for paths which do not correspond to RFC 3986's <code>path-noscheme</code>.</p>
+<p>Helper procedure where the final optional argument to <code>string->relative-path</code> is set to <code>#t</code>, then the output path will be prefixed with ‘./’.</p>
 
 <b>Procedure:</b> <code>(string->rfc-absolute-path str)</code><span class="type-sig">: string &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(string->rfc-absolute-path str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; relative-path</span><br>
@@ -613,7 +613,7 @@ example-IRI → &lt;/ex#IRI&gt;
 
 <b>Procedure:</b> <code>(vector->rfc-path-noscheme str)</code><span class="type-sig">: string &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(vector->rfc-path-noscheme str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; relative-path</span><br>
-<p>Helper procedure where the final optional argument to <code>vector->relative-path</code> is set to <code>#t</code>, meaning that an error is raised for paths which do not correspond to RFC 3986's <code>path-noscheme</code>.</p>
+<p>Helper procedure where the final optional argument to <code>vector->relative-path</code> is set to <code>#t</code>,  then the output path will be prefixed with ‘./’.</p>
 
 <b>Procedure:</b> <code>(vector->rfc-absolute-path str)</code><span class="type-sig">: string &rarr; relative-path</span><br>
 <b>Procedure:</b> <code>(vector->rfc-absolute-path str escape-these)</code><span class="type-sig">: string &rarr; char-set &rarr; relative-path</span><br>
