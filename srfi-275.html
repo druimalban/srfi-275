@@ -38,6 +38,7 @@ SPDX-License-Identifier: MIT
       <li>Received: 2026-06-15</li>
       <li>60-day deadline: 2026-08-14</li>
       <li>Draft #1 published: 2026-06-15</li>
+      <li>Draft #2 published: 2026-08-11</li>
     </ul>
 
 <h2 id="toc">Table of contents</h2>
@@ -473,7 +474,7 @@ example-IRI → &lt;/ex#IRI&gt;
 <b>Procedure:</b> <code>(get-iri port stop?)</code><span class="type-sig">: port &rarr; procedure &rarr; iri</span><br>
 <b>Procedure:</b> <code>(get-absolute-iri port)</code><span class="type-sig">: port &rarr; iri</span><br>
 <b>Procedure:</b> <code>(get-absolute-iri port stop?)</code><span class="type-sig">: port &rarr; procedure &rarr; iri</span><br>
-<p>The <code>get-iri</code> procedure parses a stream of text from a port as an IRI, stopping if the predicate procedure <code>stop?</code> holds, which is by default <code>eof-object?</code>. Exposing such a low-level procedure is advantageous because it can be used directly in streaming parsers for data which contains IRIs, such as JSON-LD. An error is raised if the port is not a textual input port, and the parse behaviour is identical to <code>string->iri</code>. The <code>get-absolute-iri</code> is related to <code>get-iri</code> in the same way that <code>string->absolute-iri</code> is related to <cod>string->iri</code>.</p>
+<p>The <code>get-iri</code> procedure parses a stream of text from a port as an IRI, stopping if the predicate procedure <code>stop?</code> holds, which is by default <code>eof-object?</code>. Exposing such a low-level procedure is advantageous because it can be used directly in streaming parsers for data which contains IRIs, such as JSON-LD. An error is raised if the port is not a textual input port, and the parse behaviour is identical to <code>string->iri</code>. The <code>get-absolute-iri</code> is related to <code>get-iri</code> in the same way that <code>string->absolute-iri</code> is related to <code>string->iri</code>.</p>
 <p>In the sample implementation, this procedure is the basis for <code>string->iri</code>.</p>
 
 <h4 id="library-srfi-275-uri">Library: <code>(srfi :275 uri)</code></h4>
@@ -489,7 +490,7 @@ example-IRI → &lt;/ex#IRI&gt;
 <b>Procedure:</b> <code>(get-uri port stop?)</code><span class="type-sig">: port &rarr; procedure &rarr; uri</span><br>
 <b>Procedure:</b> <code>(get-absolute-uri port)</code><span class="type-sig">: port &rarr; uri</span><br>
 <b>Procedure:</b> <code>(get-absolute-uri port stop?)</code><span class="type-sig">: port &rarr; procedure &rarr; uri</span><br>
-<p>The <code>get-uri</code> procedure parses a stream of text from a port as an URI, stopping if the predicate procedure <code>stop?</code> holds, which is by default <code>eof-object?</code>. This low-level procedure is the basis of <code>string->uri</code> and it is provided explicitly so that it can be used in streaming parsers for data which contains URIs. An error is raised if the port is not a textual input port, and the parse behaviour is identical to <code>string->uri</code>. The <code>get-absolute-uri</code> is related to <code>get-uri</code> in the same way that <code>string->absolute-uri</code> is related to <cod>string->uri</code>.</p>
+<p>The <code>get-uri</code> procedure parses a stream of text from a port as an URI, stopping if the predicate procedure <code>stop?</code> holds, which is by default <code>eof-object?</code>. This low-level procedure is the basis of <code>string->uri</code> and it is provided explicitly so that it can be used in streaming parsers for data which contains URIs. An error is raised if the port is not a textual input port, and the parse behaviour is identical to <code>string->uri</code>. The <code>get-absolute-uri</code> is related to <code>get-uri</code> in the same way that <code>string->absolute-uri</code> is related to <code>string->uri</code>.</p>
 
 <h4 id="library-srfi-275-normalize-3">Library: <code>(srfi :275 normalize)</code></h4>
 
@@ -736,7 +737,7 @@ example-IRI → &lt;/ex#IRI&gt;
 
 <h3 id="utilities">Miscellaneous utilities</h3>
 
-<h4 id="library-srfi-275-utils">Library: <code>(srfi :275 utils)</code></h4>
+<h4 id="library-srfi-275-utils-2">Library: <code>(srfi :275 utils)</code></h4>
 
 <p>Note this library additionally exports <code>encode-string</code> and <code>decode-string</code> <a href="#equivalence-and-conversion">described above</a>.</p>
 
