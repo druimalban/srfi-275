@@ -40,7 +40,7 @@ SPDX-License-Identifier: MIT
       <li>Draft #1 published: 2026-06-15</li>
     </ul>
 
-<h2>Table of contents</h2>
+<h2 id="toc">Table of contents</h2>
 <ul>
   <li><a href="#rationale">Rationale</a></li>
   <li>
@@ -82,6 +82,7 @@ SPDX-License-Identifier: MIT
       <li>
         <a href="#equivalence-and-conversion">Equivalence and conversion</a>
         <ul>
+          <li><a href="#library-srfi-275-utils">Library: (srfi :275 utils)</a></li>
           <li><a href="#library-srfi-275-iri-2">Library: (srfi :275 iri)</a></li>
           <li><a href="#library-srfi-275-uri">Library: (srfi :275 uri)</a></li>
           <li><a href="#library-srfi-275-normalize-3">Library: (srfi :275 normalize)</a></li>
@@ -103,7 +104,12 @@ SPDX-License-Identifier: MIT
           <li><a href="#library-srfi-275-path-2">Library: (srfi :275 path)</a></li>
         </ul>
       </li>
-      <li><a href="#utilities">Miscellaneous utilities</a></li>
+      <li>
+        <a href="#utilities">Miscellaneous utilities</a>
+        <ul>
+          <li><a href="#library-srfi-275-utils-2">Library: (srfi :275 utils)</a></li>
+        </ul>
+      </li>
       <li>
         <a href="#test-suite">Test suite</a>
         <ul>
@@ -114,9 +120,9 @@ SPDX-License-Identifier: MIT
           <li><a href="#path-normalization-test-cases-normalize-uri-path-segments-and-normalize-iri-path-segments">Path normalization test cases (normalize-uri-path-segments and normalize-iri-path-segments)</a></li>
           <li><a href="#uri-to-iri-conversion-uri-iri">URI to IRI conversion (uri->iri)</a></li>
           <li><a href="#iri-to-uri-conversion-iri-uri">IRI to URI conversion (iri->uri)</a></li>
-          <li><a href="#reference-resolution">Relative reference resolution (resolve-iri-reference and resolve-uri-reference)</li>
+          <li><a href="#reference-resolution">Relative reference resolution (resolve-iri-reference and resolve-uri-reference)</a></li>
           <li><a href="#utf-8-interpretation">UTF-8 interpretation</a></li>
-          <li><a href="#ip-literal-processing">IP address processing</a></li>
+          <li><a href="#ip-literal-processing">IP literal processing</a></li>
           <li><a href="#parsing-expected-segments">Parsing expected segments</a></li>
         </ul>
       </li>
@@ -125,6 +131,7 @@ SPDX-License-Identifier: MIT
   <li><a href="#implementation">Implementation</a></li>
   <li><a href="#bibliography">References</a></li>
   <li><a href="#acknowledgements">Acknowledgements</a></li>
+  <li><a href="#copyright">Copyright</a></li>
 </ul>
 
 <h2 id="abstract">Abstract</h2>
@@ -1047,7 +1054,6 @@ example-IRI → &lt;/ex#IRI&gt;
     <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.ttl">IRI-resolution-07.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.nt">IRI-resolution-07.nt</a> (with base IRI <code>&lt;file:///a/bb/ccc/d;p?q&gt;</code>)</li>
     <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-08.ttl">IRI-resolution-08.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-08.nt">IRI-resolution-08.nt</a></li>
   </ol>
-</p>
 <p>Additionally, we require the following abnormal test cases, when resolved against base IRI <code>&lt;http://a/b/c/d;p?q&gt;</code>, to yield the following results:</p>
 <dl class="test-cases">
   <dt>Over-deep ‘..’ traversal is clamped at root, not an error</dt>
