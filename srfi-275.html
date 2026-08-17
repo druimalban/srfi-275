@@ -391,7 +391,7 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <dd><code><a href="#uri-path-relative?">uri-path-relative?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-absolute?">uri-path-absolute?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-empty?">uri-path-empty?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-rfc-rootless?">uri-path-rfc-rootless?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-rfc-noscheme?">uri-path-rfc-noscheme?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-rfc-abempty?">uri-path-rfc-abempty?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-rfc-absolute?">uri-path-rfc-absolute?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-rfc-empty?">uri-path-rfc-empty?</a></code></dd>
 
 <dt>Path operations</dt>
-<dd><code><a href="#path-length">path-length</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-path?">empty-path?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-ref">path-ref</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-update">path-update</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-equal?">path-equal?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#remove-dot-segments">remove-dot-segments</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#merge-path">merge-path</a></code></dd>
+<dd><code><a href="#path-length">path-length</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-path?">empty-path?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-ref">path-ref</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-update">path-update</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-equal?">path-equal?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#remove-dot-segments">remove-dot-segments</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#merge-paths">merge-paths</a></code></dd>
 <dd><code><a href="#iri-path-segment-ref">iri-path-segment-ref</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-path-segment-update">iri-path-segment-update</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-path-segments">iri-path-segments</a></code></dd>
 <dd><code><a href="#uri-path-segment-ref">uri-path-segment-ref</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-segment-update">uri-path-segment-update</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-segments">uri-path-segments</a></code></dd>
 
@@ -465,6 +465,13 @@ example-IRI → &lt;/ex#IRI&gt;
 (map absolute-iri? (list example0 example1 example2 example3))
 → (#t #f #f #f)
   </pre>
+
+<div class="feature">
+  <span class="category">(srfi :275 iri)<br>procedure</span>
+  <code class="signature">(<a href="#empty-iri" id="empty-iri">empty-iri</a>)</code>
+    <span class="type-sig">: () &rarr; relative-iri</span><br>
+</div>
+<p>Helper procedure which takes no arguments and constructs a relative reference with no components set, i.e. <code><></code> or the result of parsing <code>""</code>.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
@@ -635,6 +642,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#non-relative-uri?" id="non-relative-uri?">non-relative-uri?</a> <var>ident</var>)</code><span class="type-sig">: any &rarr; boolean</span><br>
   <code class="signature">(<a href="#relative-uri?" id="relative-uri?">relative-uri?</a> <var>ident</var>)</code><span class="type-sig">: any &rarr; boolean</span><br>
   <code class="signature">(<a href="#absolute-uri?" id="absolute-uri?">absolute-uri?</a> <var>ident</var>)</code><span class="type-sig">: any &rarr; boolean</span><br>
+  <code class="signature">(<a href="#empty-uri" id="empty-uri">empty-uri</a>)</code><span class="type-sig">: () &rarr; relative-uri</span><br>
   <code class="signature">(<a href="#uri-scheme" id="uri-scheme">uri-scheme</a> <var>ident</var>)</code><span class="type-sig">: non-relative-uri &rarr; string</span><br>
   <code class="signature">(<a href="#uri-user" id="uri-user">uri-user</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; string</span><br>
   <code class="signature">(<a href="#uri-host" id="uri-host">uri-host</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; string</span><br>
@@ -754,7 +762,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 utils)<br>procedure</span>
   <code class="signature">(<a href="#encode-string" id="encode-string">encode-string</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; string</span><br>
-  <code class="signature">(<a href="#encode-string" id="encode-string">encode-string</a> <var>str</var> <var>escape-these</var>)</code>
+  <code class="signature">(<a href="#encode-string-2" id="encode-string-2">encode-string</a> <var>str</var> <var>escape-these</var>)</code>
     <span class="type-sig">: string &rarr; char-set &rarr; string</span><br>
 </div>
 
@@ -764,7 +772,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 utils)<br>procedure</span>
   <code class="signature">(<a href="#decode-string" id="decode-string">decode-string</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; string</span><br>
-  <code class="signature">(<a href="#decode-string" id="decode-string">decode-string</a> <var>str</var> <var>decode-these</var>)</code>
+  <code class="signature">(<a href="#decode-string-2" id="decode-string-2">decode-string</a> <var>str</var> <var>decode-these</var>)</code>
     <span class="type-sig">: string &rarr; char-set &rarr; string</span><br>
 </div>
 <p>Process a string, decoding any percent-encoded octets corresponding to characters in the decodeable range. This procedure defaults to decoding every character (SRFI 14 <a href="https://srfi.schemers.org/srfi-14/srfi-14.html#char-set:full"><code>char-set:full</code></a>). An <code>&amp;assertion-violation</code> exception is respectively raised if <var>str</var> is not a string, or if <var>decode-these</var> is not a character set, with the offending argument as irritant. When a percent-encoded octet is part of an invalid sequence of UTF-8 octets, an <code>&amp;error</code> exception is raised with the <code>#\%</code> character and the start of the sequence in which the invalid sub-sequence occured as irritants.</p>
@@ -1273,11 +1281,11 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
-  <code class="signature">(<a href="#user-settable?" id="user-settable">user-settable?</a> <var>ident</var> <var>x</var>)</code>
+  <code class="signature">(<a href="#user-settable?" id="user-settable?">user-settable?</a> <var>ident</var> <var>x</var>)</code>
     <span class="type-sig">: iri | uri &rarr; any &rarr; boolean</span><br>
-  <code class="signature">(<a href="#host-settable?" id="host-settable">host-settable?</a> <var>ident</var> <var>x</var>)</code>
+  <code class="signature">(<a href="#host-settable?" id="host-settable?">host-settable?</a> <var>ident</var> <var>x</var>)</code>
     <span class="type-sig">: iri | uri &rarr; any &rarr; boolean</span><br>
-  <code class="signature">(<a href="#port-settable?" id="port-settable">port-settable?</a> <var>ident</var> <var>x</var>)</code>
+  <code class="signature">(<a href="#port-settable?" id="port-settable?">port-settable?</a> <var>ident</var> <var>x</var>)</code>
     <span class="type-sig">: iri | uri &rarr; any &rarr; boolean</span><br>
 </div>
 <p>Helper procedures which hold providing that updating the respective authority component of IRI or URI <var>ident</var> to <var>x</var> is legal. This directly reflects the RFC 3986 and 3987 ABNF, but it&rsquo;s convenient to provide a single predicate as the conditions to check are somewhat elaborate with respect to path shape, which are as follows:</p>
@@ -1290,7 +1298,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
-  <code class="signature">(<a href="#path-settable?" id="path-settable">path-settable?</a> <var>ident</var> <var>x</var>)</code>
+  <code class="signature">(<a href="#path-settable?" id="path-settable?">path-settable?</a> <var>ident</var> <var>x</var>)</code>
     <span class="type-sig">: iri | uri &rarr; any &rarr; boolean</span><br>
 <p>Helper procedure which holds providing that updating the path component of IRI or URI <var>ident</var> to <var>x</var> is legal. This holds providing the following conditions hold:</p>
 <ol>
@@ -1868,6 +1876,8 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <h2 id="acknowledgements">Acknowledgements</h2>
 
 Thanks to Ivan Raikov and Peter Bex for suggestions on improvements, especially with respect to rejecting invalid UTF-8 sequences.
+
+HTML formatting is lifted from SRFI 276 by Peter McGoron.
 
 <h2 id="copyright">Copyright</h2>
 <p>© 2026 Duncan Guthrie.</p>
