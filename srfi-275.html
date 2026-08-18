@@ -136,16 +136,23 @@ SPDX-License-Identifier: MIT
   <li>Draft #2 published: 2026-08-11</li>
 </ul>
 
-<h2>Table of contents</h2>
+<h2 id="abstract">Abstract</h2>
+
+<p>This SRFI proposes a programming interface for working with RFC 3986 universal resource identifiers (URIs), as well as RFC 3987&rsquo;s generalisation to internationalised resource identifiers (IRIs). This document defines record types, normalization procedures, and conversion between URIs and IRIs. The proposal also specifies a basic programming interface for working with paths in isolation, as this a pervasive usage of URIs and IRIs. Finally, we contribute a test suite to specify the behaviour of normalization with respect to relative references, which has in the past been a source of divergence between implementations.</p>
+
+<h2 id="issues">Issues</h2>
+
+<p>none so far</p>
+
+<h2 id="toc">Table of contents</h2>
 <ul>
-  <li><a href="#abstract">Abstract</a></li>
-  <li><a href="#issues">Issues</a></li>
   <li><a href="#rationale">Rationale</a></li>
   <li><a href="#relative-references-and-polymorphic-procedures">Relative references and polymorphic procedures</a></li>
   <li><a href="#record-type-presentation">A record type presentation</a></li>
   <li><a href="#pure-and-impure-interfaces">Pure and impure interfaces</a></li>
   <li><a href="#error-behaviour-of-setters">Error behaviour of setters</a></li>
-  <li><a href="#normalization">Normalization</a>
+  <li>
+    <a href="#normalization">Normalization</a>
     <ul>
       <li><a href="#case-normalization">Case normalization</a></li>
       <li><a href="#escape-normalization">Escape (percent-encoding) normalization</a></li>
@@ -153,10 +160,11 @@ SPDX-License-Identifier: MIT
     </ul>
   </li>
   <li><a href="#basic-paths">Basic paths</a></li>
-  <li><a href="#rnrs-conditions">R<sup>6</sup>RS conditions</a></li>
+  <li><a href="#rnrs-conditions">R6RS conditions</a></li>
   <li><a href="#notation-and-convention">Notation and convention</a></li>
   <li><a href="#procedure-index">Index of exported procedures and variables</a></li>
-  <li><a href="#specification">Specification</a>
+  <li>
+    <a href="#specification">Specification</a>
     <ul>
       <li><a href="#iri-programming-interface">IRI programming interface</a></li>
       <li><a href="#uri-programming-interface">URI programming interface</a></li>
@@ -168,7 +176,8 @@ SPDX-License-Identifier: MIT
       <li><a href="#character-sets">Character sets</a></li>
     </ul>
   </li>
-  <li><a href="#test-suite">Test suite</a>
+  <li>
+    <a href="#test-suite">Test suite</a>
     <ul>
       <li><a href="#test-uri-case-normalization">URI case normalization test cases (normalize-uri-case)</a></li>
       <li><a href="#test-iri-case-normalization">IRI case normalization test cases (normalize-iri-case)</a></li>
@@ -177,24 +186,17 @@ SPDX-License-Identifier: MIT
       <li><a href="#test-path-normalization">Path normalization test cases (normalize-uri-path-segments and normalize-iri-path-segments)</a></li>
       <li><a href="#uri-to-iri-conversion">URI to IRI conversion (uri->iri)</a></li>
       <li><a href="#iri-to-uri-conversion">IRI to URI conversion (iri->uri)</a></li>
-      <li><a href="#test-reference-resolution">Relative reference resolution (resolve-iri-reference and resolve-uri-reference)</li>
+      <li><a href="#test-reference-resolution">Relative reference resolution (resolve-iri-reference and resolve-uri-reference)</a></li>
       <li><a href="#test-utf-8-interpretation">UTF-8 interpretation</a></li>
-      <li><a href="#test-ip-literals">IP address processing</a></li>
+      <li><a href="#test-ip-literals">IP literals</a></li>
       <li><a href="#test-parse-expected">Parsing expected segments</a></li>
     </ul>
   </li>
   <li><a href="#implementation">Implementation</a></li>
   <li><a href="#bibliography">References</a></li>
   <li><a href="#acknowledgements">Acknowledgements</a></li>
+  <li><a href="#copyright">Copyright</a></li>
 </ul>
-
-<h2 id="abstract">Abstract</h2>
-
-<p>This SRFI proposes a programming interface for working with RFC 3986 universal resource identifiers (URIs), as well as RFC 3987&rsquo;s generalisation to internationalised resource identifiers (IRIs). This document defines record types, normalization procedures, and conversion between URIs and IRIs. The proposal also specifies a basic programming interface for working with paths in isolation, as this a pervasive usage of URIs and IRIs. Finally, we contribute a test suite to specify the behaviour of normalization with respect to relative references, which has in the past been a source of divergence between implementations.</p>
-
-<h2 id="issues">Issues</h2>
-
-<p>none so far</p>
 
 <h2 id="rationale">Rationale</h2>
 
