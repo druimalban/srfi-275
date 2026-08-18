@@ -299,7 +299,7 @@ SPDX-License-Identifier: MIT
 
 <h2 id="rnrs-conditions">R<sup>6</sup>RS conditions</h2>
 
-For each procedure, error-handling behaviour is described in terms of exceptions to be raised, namely <code>&amp;assertion-violation</code> or <code>&amp;error</code>. R<sup>6</sup>RS conditions may not be available, in which implementations may simply signal an error. However, if these <i>are</i> available, then implementations <i>should</i> at minimum raise a compound condition as follows:</p>
+<p>For each procedure, error-handling behaviour is described in terms of exceptions to be raised, namely <code>&amp;assertion-violation</code> or <code>&amp;error</code>. R<sup>6</sup>RS conditions may not be available, in which implementations may simply signal an error. However, if these <i>are</i> available, then implementations <i>should</i> at minimum raise a compound condition as follows:</p>
 <ul>
   <li>Raise a <code>&amp;who</code> condition with the procedure name defined in this document</li>
   <li>Raise an <code>&amp;irritants</code> condition with the irritants in the order described</li>
@@ -345,8 +345,9 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 
 <h2 id="procedure-index">Index of exported procedures and variables</h2>
 
+<dl>
 <dt>Constructors</dt>
-<dd><code><a href="#string->iri">string->iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->absolute-iri">string->absolute-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->uri">string->uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->absolute-uri">string->absolute-uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-iri">get-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-absolute-iri">get-absolute-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-uri">get-uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-absolute-uri">get-absolute-uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-iri">empty-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-uri">empty-uri</a></code></dd>
+<dd><code><a href="#string-%3Eiri">string->iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Eabsolute-iri">string->absolute-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Euri">string->uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Eabsolute-uri">string->absolute-uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-iri">get-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-absolute-iri">get-absolute-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-uri">get-uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#get-absolute-uri">get-absolute-uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-iri">empty-iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-uri">empty-uri</a></code></dd>
 
 <dt>Predicates</dt>
 <dd><code><a href="#iri?">iri?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#absolute-iri?">absolute-iri?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri?">uri?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#absolute-uri?">absolute-uri?</a></code></dd>
@@ -354,9 +355,9 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <dt>Equivalence and conversion</dt>
 <dd><code><a href="#iri-equal?">iri-equal?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-eqv?">iri-eqv?</a></code></dd>
 <dd><code><a href="#uri-equal?">uri-equal?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-eqv?">uri-eqv?</a></code></dd>
-<dd><code><a href="#string->iri">string->iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri->string">iri->string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->uri">string->uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri->string">uri->string</a></code></dd>
+<dd><code><a href="#string-%3Eiri">string->iri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-%3Estring">iri->string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Euri">string->uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-%3Estring">uri->string</a></code></dd>
 <dd><code><a href="#encode-string">encode-string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#decode-string">decode-string</a></code></dd>
-<dd><code><a href="#iri->uri">iri->uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri->iri">uri->iri</a></code></dd>
+<dd><code><a href="#iri-%3Euri">iri->uri</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-%3Eiri">uri->iri</a></code></dd>
 
 <dt>Getters</dt>
 <dd><code><a href="#iri-scheme">iri-scheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-user">iri-user</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-host">iri-host</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-port">iri-port</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-path">iri-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-query">iri-query</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#iri-fragment">iri-fragment</a></code></dd>
@@ -366,7 +367,7 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <dd><code><a href="#uri-authority">uri-authority</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-username+password">uri-username+password</a></code></dd>
 <dd><code><a href="#uri-path-string">uri-path-string</a></code></dd>
 
-</dt>Setters</dt>
+<dt>Setters</dt>
 <dd><code><a href="#update-iri-scheme">update-iri-scheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-iri-user">update-iri-user</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-iri-host">update-iri-host</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-iri-port">update-iri-port</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-iri-path">update-iri-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-iri-query">update-iri-query</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-iri-fragment">update-iri-fragment</a></code></dd>
 <dd><code><a href="#update-iri-authority">update-iri-authority</a></code></dd>
 <dd><code><a href="#update-uri-scheme">update-uri-scheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-uri-user">update-uri-user</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-uri-host">update-uri-host</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-uri-port">update-uri-port</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-uri-path">update-uri-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-uri-query">update-uri-query</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#update-uri-fragment">update-uri-fragment</a></code></dd>
@@ -380,11 +381,11 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <dd><code><a href="#normalize-uri-case">normalize-uri-case</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#normalize-uri-escape">normalize-uri-escape</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#normalize-uri-path-segments">normalize-uri-path-segments</a></code></dd>
 
 <dt>Path constructors</dt>
-<dd><code><a href="#build-path">build-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector->relative-path">vector->relative-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector->absolute-path">vector->absolute-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->path">string->path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->relative-path">string->relative-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->absolute-path">string->absolute-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-relative-path">empty-relative-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-absolute-path">empty-absolute-path</a></code></dd>
-<dd><code><a href="#vector->rfc-path-rootless">vector->rfc-path-rootless</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector->rfc-path-noscheme">vector->rfc-path-noscheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector->rfc-path-abempty">vector->rfc-path-abempty</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector->rfc-path-absolute">vector->rfc-path-absolute</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->rfc-path-rootless">string->rfc-path-rootless</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->rfc-path-noscheme">string->rfc-path-noscheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->rfc-path-abempty">string->rfc-path-abempty</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string->rfc-path-absolute">string->rfc-path-absolute</a></code></dd>
+<dd><code><a href="#build-path">build-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector-%3Erelative-path">vector->relative-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector-%3Eabsolute-path">vector->absolute-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Epath">string->path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Erelative-path">string->relative-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Eabsolute-path">string->absolute-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-relative-path">empty-relative-path</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-absolute-path">empty-absolute-path</a></code></dd>
+<dd><code><a href="#vector-%3Erfc-path-rootless">vector->rfc-path-rootless</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector-%3Erfc-path-noscheme">vector->rfc-path-noscheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector-%3Erfc-path-abempty">vector->rfc-path-abempty</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#vector-%3Erfc-path-absolute">vector->rfc-path-absolute</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Erfc-path-rootless">string->rfc-path-rootless</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Erfc-path-noscheme">string->rfc-path-noscheme</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Erfc-path-abempty">string->rfc-path-abempty</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#string-%3Erfc-path-absolute">string->rfc-path-absolute</a></code></dd>
 
 <dt>Path serialisation</dt>
-<dd><code><a href="#path->string">path->string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-segments">path-segments</a></code></dd>
+<dd><code><a href="#path-%3Estring">path->string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-segments">path-segments</a></code></dd>
 
 <dt>Path predicates</dt>
 <dd><code><a href="#path?">path?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#relative-path?">relative-path?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#absolute-path?">absolute-path?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#empty-path?">empty-path?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-string?">path-string?</a></code></dd>
@@ -398,7 +399,7 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <dd><code><a href="#uri-path-segment-ref">uri-path-segment-ref</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-segment-update">uri-path-segment-update</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#uri-path-segments">uri-path-segments</a></code></dd>
 
 <dt>Utilities</dt>
-<dd><code><a href="#utf8->string/raise">utf8->string/raise</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#percent-encoding->string">percent-encoding->string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#percent-encoding->u8-list">percent-encoding->u8-list</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#percent-encoding->reverse-u8-list">percent-encoding->reverse-u8-list</a></code></dd>
+<dd><code><a href="#utf8-%3Estring/raise">utf8->string/raise</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#percent-encoding-%3Estring">percent-encoding->string</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#percent-encoding-%3Eu8-list">percent-encoding->u8-list</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#percent-encoding-%3Ereverse-u8-list">percent-encoding->reverse-u8-list</a></code></dd>
 <dd><code><a href="#username+password">username+password</a></code></dd>
 <dd><code><a href="#user-settable?">user-settable?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#host-settable?">host-settable?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#port-settable?">port-settable?</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#path-settable?">path-settable?</a></code></dd>
 
@@ -412,6 +413,7 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <dd><code><a href="#char-set:iri-query">char-set:iri-query</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#char-set:uri-query">char-set:uri-query</a></code></dd>
 <dd><code><a href="#char-set:iri-fragment">char-set:iri-fragment</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#char-set:uri-fragment">char-set:uri-fragment</a></code></dd>
 <dd><code><a href="#char-set:iri-allowed">char-set:iri-allowed</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#char-set:uri-allowed">char-set:uri-allowed</a></code>&emsp;&emsp;&emsp;&emsp;<code><a href="#char-set:path-allowed">char-set:path-allowed</a></code></dd>
+</dl>
 
 <h2 id="specification">Specification</h2>
 <h3 id="iri-programming-interface">IRI programming interface</h3>
@@ -442,7 +444,7 @@ For each procedure, error-handling behaviour is described in terms of exceptions
 <!--b>Syntax:</b> <code>relative-iri</code><br-->
 <p>Examples:</p>
   <pre>
-(define example-IRI (<a href="#string->iri">string->iri</a> "/ex#IRI"))
+(define example-IRI (<a href="#string-%3Eiri">string->iri</a> "/ex#IRI"))
 
 example-IRI → &lt;/ex#IRI&gt;
 
@@ -456,10 +458,10 @@ example-IRI → &lt;/ex#IRI&gt;
   <code class="signature">(<a href="#absolute-iri?" id="absolute-iri?">absolute-iri?</a> <var>ident</var>)</code>
     <span class="type-sig">: any &rarr; boolean</span><br>
 </div>
-<p>Returns <code>#t</code> providing that <var>ident</var> is absolute, which means that it is non-relative, and its <a href="#iri-fragment">fragment</a> component is unset (<code>#f</code>).  This corresponds exactly to RFC 3987&rsquo;s <a href="https://www.rfc-editor.org/info/rfc3987/#section-2.2>"<code>absolute-IRI</code> production</a>.</p>
+<p>Returns <code>#t</code> providing that <var>ident</var> is absolute, which means that it is non-relative, and its <a href="#iri-fragment">fragment</a> component is unset (<code>#f</code>).  This corresponds exactly to RFC 3987&rsquo;s <a href="https://www.rfc-editor.org/info/rfc3987/#section-2.2"><code>absolute-IRI</code> production</a>.</p>
 <p>Examples:</p>
   <pre>
-(define example0 (<a href="#string->iri">string->iri</a> "http://example.org/ex?cond"))
+(define example0 (<a href="#string-%3Eiri">string->iri</a> "http://example.org/ex?cond"))
 (define example1 (string->iri "http://example.org/ex#title"))
 (define example2 (string->iri "//example.org/ex?cond"))
 (define example3 (string->iri "//example.org/ex#title"))
@@ -473,7 +475,7 @@ example-IRI → &lt;/ex#IRI&gt;
   <code class="signature">(<a href="#empty-iri" id="empty-iri">empty-iri</a>)</code>
     <span class="type-sig">: () &rarr; relative-iri</span><br>
 </div>
-<p>Helper procedure which takes no arguments and constructs a relative reference with no components set, i.e. <code><></code> or the result of parsing <code>""</code>.</p>
+<p>Helper procedure which takes no arguments and constructs a relative reference with no components set, i.e. <code>&lt;&gt;</code> or the result of parsing <code>""</code>.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
@@ -495,7 +497,7 @@ example-IRI → &lt;/ex#IRI&gt;
     <span class="type-sig">: iri &rarr; string</span><br>
 </div>
 
-<p>Retrieve the respective RFC 3987 fields as either a string, or <code>#f</code>. Unlike <a href="#iri-scheme">iri-scheme</code></a>, these procedures are polymorphic on IRIs and relative references. An <i>empty</i> field is distinct from an unset one, for example given an IRI with bare <code>?</code>, <code>iri-query</code> would return <code>""</code>, whereas if <code>?</code> had been omitted, <code>iri-query</code> would return <code>#f</code>. An <code>&amp;assertion-violation</code> exception with <var>ident</var> as irritant if it is not an IRI or relative reference.</p>
+<p>Retrieve the respective RFC 3987 fields as either a string, or <code>#f</code>. Unlike <a href="#iri-scheme"><code>iri-scheme</code></a>, these procedures are polymorphic on IRIs and relative references. An <i>empty</i> field is distinct from an unset one, for example given an IRI with bare <code>?</code>, <code>iri-query</code> would return <code>""</code>, whereas if <code>?</code> had been omitted, <code>iri-query</code> would return <code>#f</code>. An <code>&amp;assertion-violation</code> exception with <var>ident</var> as irritant if it is not an IRI or relative reference.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
@@ -515,7 +517,7 @@ example-IRI → &lt;/ex#IRI&gt;
 
 <p>Examples for the above seven component-specific procedures:</p>
   <pre>
-(define example-IRI (<a href="#string->iri">string->iri</a> "http://example.org:80/ex#IRI"))
+(define example-IRI (<a href="#string-%3Eiri">string->iri</a> "http://example.org:80/ex#IRI"))
 
 example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
@@ -534,7 +536,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
   <code class="signature">(<a href="#iri-authority" id="iri-authority">iri-authority</a> <var>ident</var>)</code>
-    <span class="type-sig">: iri &rarr; #f | (string?, string?, fixnum?)</span></br>
+    <span class="type-sig">: iri &rarr; #f | (string?, string?, fixnum?)</span><br>
 </div>
 <p>Authority is derived from the user, host and port. This procedure returns <code>#f</code> if no authority component is set, else all three as multiple values. An <code>&amp;assertion-violation</code> exception is raised with <var>ident</var> as irritant if it is not an IRI or relative reference.</p>
 
@@ -580,7 +582,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
   <code class="signature">(<a href="#update-iri-scheme" id="update-iri-scheme">update-iri-scheme</a> <var>ident</var> <var>str</var>)</code>
-    </code><span class="type-sig">: non-relative-iri &rarr; string &rarr; non-relative-iri</span><br>
+    <span class="type-sig">: non-relative-iri &rarr; string &rarr; non-relative-iri</span><br>
 </div>
 
 <p>Pure functional setter for the scheme component of non-relative IRI <var>ident</var>, encoding the string <var>str</var>. During parsing, an <code>&amp;error</code> exception is raised if a character cannot be contained within a scheme at that position, with the character, its position in the IRI, and the IRI as irritants. An <code>&amp;assertion-violation</code> exception is raised if <var>ident</var> with that argument as irritant if it is not a <i>non-relative</i> IRI. Finally, an <code>&amp;assertion-violation</code> exception is raised with <var>str</var> as irritant if it is not a string.</p>
@@ -652,10 +654,10 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#uri-fragment" id="uri-fragment">uri-fragment</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; string</span><br>
   <code class="signature">(<a href="#uri-port" id="uri-port">uri-port</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; fixnum?</span><br>
   <code class="signature">(<a href="#uri-path" id="uri-path">uri-path</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; path</span><br>
-  <code class="signature">(<a href="#uri-authority" id="uri-authority">uri-authority</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; #f | (string?, string?, fixnum?)</span></br>
+  <code class="signature">(<a href="#uri-authority" id="uri-authority">uri-authority</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; #f | (string?, string?, fixnum?)</span><br>
   <code class="signature">(<a href="#uri-username+password" id="uri-username+password">uri-username+password</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; (string, string)</span><br>
   <code class="signature">(<a href="#uri-path-string" id="uri-path-string">uri-path-string</a> <var>ident</var>)</code><span class="type-sig">: uri &rarr; string</span><br>
-    <code class="signature">(<a href="#update-uri-scheme" id="update-uri-scheme">update-uri-scheme</a> <var>ident</var> <var>str</var>)</code></code><span class="type-sig">: non-relative-uri &rarr; string &rarr; non-relative-uri</span><br>
+    <code class="signature">(<a href="#update-uri-scheme" id="update-uri-scheme">update-uri-scheme</a> <var>ident</var> <var>str</var>)</code><span class="type-sig">: non-relative-uri &rarr; string &rarr; non-relative-uri</span><br>
   <code class="signature">(<a href="#update-uri-user" id="update-uri-user">update-uri-user</a> <var>ident</var> <var>str</var>)</code><span class="type-sig">: uri &rarr; string? &rarr; uri</span><br>
   <code class="signature">(<a href="#update-uri-host" id="update-uri-host">update-uri-host</a> <var>ident</var> <var>str</var>)</code><span class="type-sig">: uri &rarr; string? &rarr; uri</span><br>
   <code class="signature">(<a href="#update-uri-port" id="update-uri-port">update-uri-port</a> <var>ident</var> <var>fixnum</var>)</code><span class="type-sig">: uri &rarr; fixnum? &rarr; uri</span><br>
@@ -781,9 +783,9 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
-  <code class="signature">(<a href="#string->iri" id="string->iri">string->iri</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Eiri" id="string-%3Eiri">string->iri</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; iri</span><br>
-  <code class="signature">(<a href="#string->absolute-iri" id="string->absolute-iri">string->absolute-iri</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Eabsolute-iri" id="string-%3Eabsolute-iri">string->absolute-iri</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; non-relative-iri</span><br>
 </div>
 
@@ -792,7 +794,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
-  <code class="signature">(<a href="#iri->string" id="iri->string">iri->string</a> <var>ident</var>)</code>
+  <code class="signature">(<a href="#iri-%3Estring" id="iri-%3Estring">iri->string</a> <var>ident</var>)</code>
     <span class="type-sig">: iri &rarr; string</span><br>
 </div>
 
@@ -824,11 +826,11 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 uri)<br>procedure</span>
-  <code class="signature">(<a href="#string->uri" id="string->uri">string->uri</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Euri" id="string-%3Euri">string->uri</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; uri</span><br>
-  <code class="signature">(<a href="#string->absolute-uri" id="string->absolute-uri">string->absolute-uri</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Eabsolute-uri" id="string-%3Eabsolute-uri">string->absolute-uri</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; non-relative-uri</span><br>
-  <code class="signature">(<a href="#uri->string" id="uri->string">uri->string</a> <var>ident</var>)</code>
+  <code class="signature">(<a href="#uri-%3Estring" id="uri-%3Estring">uri->string</a> <var>ident</var>)</code>
     <span class="type-sig">: uri &rarr; string</span><br>
   <code class="signature">(<a href="#get-uri" id="get-uri">get-uri</a> <var>port</var>)</code>
     <span class="type-sig">: port &rarr; uri</span><br>
@@ -854,7 +856,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 normalize)<br>procedure</span>
-  <code class="signature">(<a href="#iri->uri" id="iri->uri">iri->uri</a> <var>ident</var>)</code>
+  <code class="signature">(<a href="#iri-%3Euri" id="iri-%3Euri">iri->uri</a> <var>ident</var>)</code>
     <span class="type-sig">: iri &rarr; uri</span><br>
 </div>
 
@@ -862,7 +864,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 normalize)<br>procedure</span>
-  <code class="signature">(<a href="#uri->iri" id="uri->iri">uri->iri</a> <var>ident</var>)</code>
+  <code class="signature">(<a href="#uri-%3Eiri" id="uri-%3Eiri">uri->iri</a> <var>ident</var>)</code>
     <span class="type-sig">: uri &rarr; iri</span><br>
 </div>
 <p>Convert an URI to an IRI. This procedure can be viewed as upgrading the URI structure to that of an IRI, then normalizing it as an IRI. An <code>&amp;assertion-violation</code> exception is raised with <var>ident</var> as irritant if it is not an URI or relative reference.</p>
@@ -1003,7 +1005,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#path->string" id="path->string">path->string</a> <var>path</var>)</code>
+  <code class="signature">(<a href="#path-%3Estring" id="path-%3Estring">path->string</a> <var>path</var>)</code>
     <span class="type-sig">: path &rarr; string</span><br>
 </div>
 <p>Serialise <var>path</var> as a string, with no decoding of percent-encoded escapes. An <code>&amp;assertion-violation</code> exception is raised with <var>path</var> as irritant if it is not a path object.</p>
@@ -1017,25 +1019,25 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#string->path" id="string->path">string->path</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Epath" id="string-%3Epath">string->path</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; path</span><br>
 </div>
 <p>Convert a string to a path. Both relative paths with a colon in the initial segment, and absolute paths with an empty initial segment, are permitted. When a percent-encoded octet is part of an invalid sequence of UTF-8 octets, an <code>&amp;errorf</code> exception is raised with the <code>#\%</code> character, and the start of the sequence in which the invalid sub-sequence occured, as irritants. An <code>&amp;assertion-violation</code> exception is raised with <var>str</var> as irritant if it is not a string.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#string->relative-path" id="string->relative-path">string->relative-path</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Erelative-path" id="string-%3Erelative-path">string->relative-path</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; relative-path</span><br>
-  <code class="signature">(<a href="#string->relative-path-2" id="string->relative-path-2">string->relative-path</a> <var>str</var> <var>noscheme?</var>)</code>
+  <code class="signature">(<a href="#string-%3Erelative-path-2" id="string-%3Erelative-path-2">string->relative-path</a> <var>str</var> <var>noscheme?</var>)</code>
     <span class="type-sig">: string &rarr; boolean &rarr; relative-path</span><br>
 </div>
 <p>Convert a string to a relative path. If the additional optional <var>noscheme?</var> argument is provided and holds true, then the path output will be prefixed with <code>./</code>. An <code>&amp;error</code> exception is raised with the <var>str</var> as irritant if it has a leading slash. Error behaviour is otherwise identical to <code>string->path</code>.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#string->absolute-path" id="string->absolute-path">string->absolute-path</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Eabsolute-path" id="string-%3Eabsolute-path">string->absolute-path</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; absolute-path</span><br>
-  <code class="signature">(<a href="#string->absolute-path-2" id="string->absolute-path-2">string->absolute-path</a> <var>str</var> <var>nonempty-ini?</var>)</code>
+  <code class="signature">(<a href="#string-%3Eabsolute-path-2" id="string-%3Eabsolute-path-2">string->absolute-path</a> <var>str</var> <var>nonempty-ini?</var>)</code>
     <span class="type-sig">: string &rarr; boolean &rarr; absolute-path</span><br>
 </div>
 
@@ -1043,57 +1045,57 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#string->rfc-path-rootless" id="string->rfc-path-rootless">string->rfc-path-rootless</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Erfc-path-rootless" id="string-%3Erfc-path-rootless">string->rfc-path-rootless</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; relative-path</span><br>
-  <code class="signature">(<a href="#string->rfc-path-noscheme" id="string->rfc-path-noscheme">string->rfc-path-noscheme</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Erfc-path-noscheme" id="string-%3Erfc-path-noscheme">string->rfc-path-noscheme</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; relative-path</span><br>
 </div>
-<p>Helper procedures in which the final optional argument to <a href="#string->relative-path"><code>string->relative-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
+<p>Helper procedures in which the final optional argument to <a href="#string-%3Erelative-path"><code>string->relative-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#string->rfc-path-abempty" id="string->rfc-path-abempty">string->rfc-path-abempty</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Erfc-path-abempty" id="string-%3Erfc-path-abempty">string->rfc-path-abempty</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; absolute-path</span><br>
-  <code class="signature">(<a href="#string->rfc-path-absolute" id="string->rfc-path-absolute">string->rfc-path-absolute</a> <var>str</var>)</code>
+  <code class="signature">(<a href="#string-%3Erfc-path-absolute" id="string-%3Erfc-path-absolute">string->rfc-path-absolute</a> <var>str</var>)</code>
     <span class="type-sig">: string &rarr; absolute-path</span><br>
 </div>
-<p>Helper procedures in which the final optional argument to <a href="#string->absolute-path"><code>string->absolute-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
+<p>Helper procedures in which the final optional argument to <a href="#string-%3Eabsolute-path"><code>string->absolute-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#vector->relative-path" id="vector->relative-path">vector->relative-path</a> <var>vec</var>)</code>
+  <code class="signature">(<a href="#vector-%3Erelative-path" id="vector-%3Erelative-path">vector->relative-path</a> <var>vec</var>)</code>
     <span class="type-sig">: vector(string) &rarr; relative-path</span><br>
-  <code class="signature">(<a href="#vector->relative-path-2" id="vector->relative-path-2">vector->relative-path</a> <var>vec</var> <var>noscheme?</var>)</code>
+  <code class="signature">(<a href="#vector-%3Erelative-path-2" id="vector-%3Erelative-path-2">vector->relative-path</a> <var>vec</var> <var>noscheme?</var>)</code>
     <span class="type-sig">: vector(string) &rarr; boolean &rarr; relative-path</span><br>
 </div>
-<p>Convert a vector of string segments to a relative path. This procedure behaves similarly to <a href="#string->relative-path"><code>string->relative-path</code></a> with the exception that that slashes are always escaped, so a slash at the start of the first segment does not raise an error. An <code>&amp;assertion-violation</code> exception is raised with the input argument as irritant if it is not a vector, and an <code>&amp;error</code> exception is raised if a segment is not a string, with the segment, its position, and <var>vec</var> as irritants. Finally, if the initial segment is empty (serialised as leading slash), then an <code>&amp;error</code> exception is raised with the (string) segment, its position, and <i>vec</i> as irritants.</p>
+<p>Convert a vector of string segments to a relative path. This procedure behaves similarly to <a href="#string-%3Erelative-path"><code>string->relative-path</code></a> with the exception that that slashes are always escaped, so a slash at the start of the first segment does not raise an error. An <code>&amp;assertion-violation</code> exception is raised with the input argument as irritant if it is not a vector, and an <code>&amp;error</code> exception is raised if a segment is not a string, with the segment, its position, and <var>vec</var> as irritants. Finally, if the initial segment is empty (serialised as leading slash), then an <code>&amp;error</code> exception is raised with the (string) segment, its position, and <i>vec</i> as irritants.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#vector->absolute-path" id="vector->absolute-path">vector->absolute-path</a> <var>vec</var>)</code>
+  <code class="signature">(<a href="#vector-%3Eabsolute-path" id="vector-%3Eabsolute-path">vector->absolute-path</a> <var>vec</var>)</code>
     <span class="type-sig">: vector(string) &rarr; absolute-path</span><br>
-  <code class="signature">(<a href="#vector->absolute-path-2" id="vector->absolute-path-2">vector->absolute-path</a> <var>vec</var> <var>nonempty-ini?</var>)</code>
+  <code class="signature">(<a href="#vector-%3Eabsolute-path-2" id="vector-%3Eabsolute-path-2">vector->absolute-path</a> <var>vec</var> <var>nonempty-ini?</var>)</code>
     <span class="type-sig">: vector(string) &rarr; boolean &rarr; absolute-path</span><br>
 </div>
-<p>Convert a vector of string segments to an absolute path. This procedure behaves similarly to <a href="#string->absolute-path"><code>string->absolute-path</code></a> with the exception that that slashes are always escaped, so a slash at the start of the first segment does not raise an error. An <code>&amp;assertion-violation</code> exception is raised with the input argument as irritant if it is not a vector, and an <code>&amp;error</code> exception is raised if a segment is not a string, with the segment, its position, and the vector input as irritants.</p>
+<p>Convert a vector of string segments to an absolute path. This procedure behaves similarly to <a href="#string-%3Eabsolute-path"><code>string->absolute-path</code></a> with the exception that that slashes are always escaped, so a slash at the start of the first segment does not raise an error. An <code>&amp;assertion-violation</code> exception is raised with the input argument as irritant if it is not a vector, and an <code>&amp;error</code> exception is raised if a segment is not a string, with the segment, its position, and the vector input as irritants.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#vector->rfc-path-rootless" id="vector->rfc-path-rootless">vector->rfc-path-rootless</a> <var>vec</var>)</code>
+  <code class="signature">(<a href="#vector-%3Erfc-path-rootless" id="vector-%3Erfc-path-rootless">vector->rfc-path-rootless</a> <var>vec</var>)</code>
     <span class="type-sig">: vector(string) &rarr; relative-path</span><br>
-  <code class="signature">(<a href="#vector->rfc-path-noscheme" id="vector->rfc-path-noscheme">vector->rfc-path-noscheme</a> <var>vec</var>)</code>
+  <code class="signature">(<a href="#vector-%3Erfc-path-noscheme" id="vector-%3Erfc-path-noscheme">vector->rfc-path-noscheme</a> <var>vec</var>)</code>
     <span class="type-sig">: vector(string) &rarr; relative-path</span><br>
 </div>
-<p>Helper procedures in which the final optional argument to <a href="#vector->relative-path"><code>vector->relative-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
+<p>Helper procedures in which the final optional argument to <a href="#vector-%3Erelative-path"><code>vector->relative-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
-  <code class="signature">(<a href="#vector->rfc-path-abempty" id="vector->rfc-path-abempty">vector->rfc-path-abempty</a> <var>vec</var>)</code>
+  <code class="signature">(<a href="#vector-%3Erfc-path-abempty" id="vector-%3Erfc-path-abempty">vector->rfc-path-abempty</a> <var>vec</var>)</code>
     <span class="type-sig">: vector(string) &rarr; absolute-path</span><br>
-  <code class="signature">(<a href="#vector->rfc-path-absolute" id="vector->rfc-path-absolute">vector->rfc-path-absolute</a> <var>vec</var>)</code>
+  <code class="signature">(<a href="#vector-%3Erfc-path-absolute" id="vector-%3Erfc-path-absolute">vector->rfc-path-absolute</a> <var>vec</var>)</code>
     <span class="type-sig">: vector(string) &rarr; absolute-path</span><br>
 </div>
-<p>Helper procedures in which the final optional argument to <a href="#vector->absolute-path"><code>vector->absolute-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
+<p>Helper procedures in which the final optional argument to <a href="#vector-%3Eabsolute-path"><code>vector->absolute-path</code></a> is set to <code>#f</code> and <code>#t</code> respectively.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
@@ -1226,14 +1228,14 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
-  <code class="signature">(<a href="#utf8->string/raise" id="utf8->string/raise">utf8->string/raise</a> <var>bv</var>)</code>
+  <code class="signature">(<a href="#utf8-%3Estring/raise" id="utf8-%3Estring/raise">utf8->string/raise</a> <var>bv</var>)</code>
     <span class="type-sig">: bytevector &rarr; string</span><br>
 </div>
 <p>R<sup>6</sup>RS&rsquo;s <code>utf8->string</code> procedure silently substitutes the unicode replacement character (<code>U+FFFD</code>) given an invalid UTF-8 sequence. If the information is available, then this procedure raises an <code>&amp;assertion-violation</code> exception with the offending octet and its position within the bytevector as irritants. Otherwise, the irritants are the offending octet alone.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
-  <code class="signature">(<a href="#percent-encoding->string" id="percent-encoding->string">percent-encoding->string</a> <var>pct</var>)</code>
+  <code class="signature">(<a href="#percent-encoding-%3Estring" id="percent-encoding-%3Estring">percent-encoding->string</a> <var>pct</var>)</code>
     <span class="type-sig">: fixnum &rarr; string</span><br>
 </div>
 <p>Get a string representation of a percent-encoding in its canonical, upper-case form <code>% 0-F 0-F</code>. An <code>&amp;assertion-violation</code> exception is raised with <var>pct</var> as irritant if it is not a non-negative fixnum less than 256. Examples:</p>
@@ -1248,7 +1250,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
-  <code class="signature">(<a href="#percent-encoding->u8-list" id="percent-encoding->u8-list">percent-encoding->u8-list</a> <var>pct</var>)</code>
+  <code class="signature">(<a href="#percent-encoding-%3Eu8-list" id="percent-encoding-%3Eu8-list">percent-encoding->u8-list</a> <var>pct</var>)</code>
     <span class="type-sig">: fixnum &rarr; list(u8)</span><br>
 </div>
 <p>Get the UTF-8 octets corresponding to the canonical string representation of the percent-encoding. An <code>&amp;assertion-violation</code> exception is raised with <var>pct</var> as irritant if it is not a non-negative fixnum less than 256. Examples:</p>
@@ -1262,7 +1264,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
-  <code class="signature">(<a href="#percent-encoding->reverse-u8-list" id="percent-encoding->reverse-u8-list">percent-encoding->reverse-u8-list</a> <var>pct</var>)</code>
+  <code class="signature">(<a href="#percent-encoding-%3Ereverse-u8-list" id="percent-encoding-%3Ereverse-u8-list">percent-encoding->reverse-u8-list</a> <var>pct</var>)</code>
     <span class="type-sig">: fixnum &rarr; list(u8)</span><br>
 </div>
 <p>Get the UTF-8 octets corresponding to the canonical string representation of the percent-encoding, in reverse order. An <code>&amp;assertion-violation</code> exception is raised with <var>pct</var> as irritant if it is not a non-negative fixnum less than 256.</p>
@@ -1302,6 +1304,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 utils)<br>procedure</span>
   <code class="signature">(<a href="#path-settable?" id="path-settable?">path-settable?</a> <var>ident</var> <var>x</var>)</code>
     <span class="type-sig">: iri | uri &rarr; any &rarr; boolean</span><br>
+</div>
 <p>Helper procedure which holds providing that updating the path component of IRI or URI <var>ident</var> to <var>x</var> is legal. This holds providing the following conditions hold:</p>
 <ol>
   <li>If either of the authority components above are set, then <a href="#rfc-path-abempty?"><code>rfc-path-abempty?</code></a> must hold against the second input argument <var>x</var>.</li>
@@ -1644,7 +1647,6 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
     <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.ttl">IRI-resolution-07.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-07.nt">IRI-resolution-07.nt</a> (with base IRI <code>&lt;file:///a/bb/ccc/d;p?q&gt;</code>)</li>
     <li><a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-08.ttl">IRI-resolution-08.ttl</a> &rarr; <a href="https://github.com/w3c/rdf-tests/blob/main/rdf/rdf11/rdf-turtle/IRI-resolution-08.nt">IRI-resolution-08.nt</a></li>
   </ol>
-</p>
 <p>Additionally, we require the following abnormal test cases, when resolved against base IRI <code>&lt;http://a/b/c/d;p?q&gt;</code>, to yield the following results:</p>
 <dl class="test-cases">
   <dt>Over-deep <code>..</code> traversal is clamped at root, not an error</dt>
