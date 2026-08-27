@@ -182,13 +182,13 @@ SPDX-License-Identifier: MIT
     <ul>
       <li><a href="#test-uri-case-normalization">URI case normalization test cases (normalize-uri-case)</a></li>
       <li><a href="#test-iri-case-normalization">IRI case normalization test cases (normalize-iri-case)</a></li>
-      <li><a href="#test-uri-escape-normalization">URI escape (percent-encoding) normalization test cases (normalize-uri-escape)</a></li>
+      <li><a href="#test-uri-escape-normalization">URI escape (percent-encoded byte) normalization test cases (normalize-uri-escape)</a></li>
       <li><a href="#test-iri-escape-normalization">IRI escape normalization test cases (normalize-iri-escape)</a></li>
       <li><a href="#test-path-normalization">Path normalization test cases (normalize-uri-path and normalize-iri-path)</a></li>
       <li><a href="#uri-to-iri-conversion">URI to IRI conversion (uri->iri)</a></li>
       <li><a href="#iri-to-uri-conversion">IRI to URI conversion (iri->uri)</a></li>
       <li><a href="#test-reference-resolution">Relative reference resolution (resolve-iri and resolve-uri)</a></li>
-      <li><a href="#test-reference-extraction">Relative reference extraction (relativize-iri and relativize-uri)</li>
+      <li><a href="#test-reference-extraction">Relativization with respect to a base IRI (<code>relativize-iri</code> and <code>relativize-uri</code>)</li>
       <li><a href="#test-utf-8-interpretation">UTF-8 interpretation</a></li>
       <li><a href="#test-ip-literals">IP literals</a></li>
       <li><a href="#test-parse-expected">Parsing expected segments</a></li>
@@ -202,7 +202,7 @@ SPDX-License-Identifier: MIT
 
 <h2 id="rationale">Rationale</h2>
 
-<p>RFC 3986 <a href="#rfc3986">[1]</a> describes an abstract syntax for uniform resource identifiers (URIs) as well as their relative references, which allow documents to be authored without knowing the final publishing location. RFC 3987 <a href="#rfc3987">[2]</a> defines IRIs, which generalise URIs to Unicode by defining an interpretation of <a href="#escape-normalization">percent-encoded-bytes</a> as sequences of UTF-8 octets.</p>
+<p>RFC 3986 <a href="#rfc3986">[1]</a> describes an abstract syntax for uniform resource identifiers (URIs) as well as their relative references, which allow documents to be authored without knowing the final publishing location. RFC 3987 <a href="#rfc3987">[2]</a> defines IRIs, which generalise URIs to Unicode by defining an interpretation of <a href="#escape-normalization">percent-encoded bytes</a> as sequences of UTF-8 octets.</p>
 
 <p>URIs and IRIs are widely used to denote resources across the world wide web, and are the basis of a number of web standards. It is critical to present a programming interface for manipulation of different components in isolation (e.g. paths, hostnames), as working with an URI&rsquo;s coarse string representation directly is error-prone. RFC 3986 defines an abstract syntax and hence conveniently forms the basis of such a programming interface. Further, RFC 3987&rsquo;s generalisation to internationalised identifiers is a natural extension, allowing us to faithfully denote resources in a number of languages, using the universal character set. Indeed, IRIs form the basis of modern standards like Resource Description Framework (RDF), a widespread formal model for metadata interchange and knowledge representation. We hence require support for both URIs and IRIs.</p>
 
@@ -242,8 +242,8 @@ SPDX-License-Identifier: MIT
 
 <p>We support three, scheme-independent normalization procedures:</p>
   <ol>
-    <li>Case normalization, in which U.S. ASCII may be case-insensitive, and in which escaped (percent-encoded) octets have a canonical upper-case form.</li>
-    <li>Escape normalization, in which percent-encoded octets may be decoded, or characters may be encoded as escapes.</li>
+    <li>Case normalization, in which U.S. ASCII may be case-insensitive, and in which escaped octets have a canonical upper-case form.</li>
+    <li>Escape normalization, in which percent-encoded bytes may be decoded, or characters may be encoded as escapes.</li>
     <li>Path segment normalization, in which dotted segments (&lsquo;<code>.</code>&rsquo; and &lsquo;<code>..</code>&rsquo;) are eliminated.</li>
   </ol>
 
@@ -300,7 +300,7 @@ SPDX-License-Identifier: MIT
 
 <h3 id="resolve-and-relativize">Relative reference resolution and relativization</h3>
 <p>Relative reference resolution resolves an URI or IRI against a (non-relative) base URI or IRI. This SRFI proposal simply names these procedures <a href="#resolve-iri"><code>resolve-iri</code></a> and <a href="#resolve-uri"><code>resolve-uri</code></a> as the "relative reference resolution" language in RFC 3986 and 3987 specifically refers to the <code>URI-reference</code> and <code>IRI-reference</code> (see <a href="#polymorphic-procedures">above</a>). Additionally, this naming is consistent with existing libraries such as Erlang's <code>uri_string</code> module <a href="#erlang-uri-string">[3]</a> and Java's URI module <a href="#java-se25-uri">[12]</a>.</p>
-<p>The inverse of this procedure takes a non-relative URI or IRI and a base URI or IRI, and produces a relative reference which, given the base, would produce that non-relative URI or IRI. This is not defined in RFC 3986 or 3987, but is fairly widespread, such as <code>relative-from</code> found in Haskell's <code>network-uri</code> <a href="#hs-network-uri">[5]</a> and Chicken's <code>uri-generic</code> <a href="#chicken-uri-generic">[6]</a>, and <code>relativize</code> found in Java's URI module <a href="#java-se25-uri">[12]</a>. The Haskell and Chicken libraries arguments are flipped for consistency with naming, whereas Java's class methods belong to the base URI. This SRFI proposal names these procedures <a href="#relativize-iri"><code>relativize-iri</code></a> and <a href="#relativize-uri"><code>relativize-uri</code></a>, which follows Java's naming and argument convention, although the behaviour and test cases are based on the Chicken library:</p>
+<p>The inverse of this procedure takes a non-relative URI or IRI and a base URI or IRI, and produces a relative reference which, given the base, would produce that non-relative URI or IRI. This is not defined in RFC 3986 or 3987, but is fairly widespread, such as <code>relative-from</code> found in Haskell's <code>network-uri</code> <a href="#hs-network-uri">[5]</a> and Chicken's <code>uri-generic</code> <a href="#chicken-uri-generic">[6]</a>, and <code>relativize</code> found in Java's URI module <a href="#java-se25-uri">[12]</a>. The Haskell and Chicken libraries arguments are flipped for consistency with their direction, whereas Java's class methods belong to the base URI. This SRFI proposal names these procedures <a href="#relativize-iri"><code>relativize-iri</code></a> and <a href="#relativize-uri"><code>relativize-uri</code></a>, which follows Java's naming and argument convention, although the behaviour and test cases are based on the Chicken library:</p>
 <p>Relativization proceeds as follows:</p>
 <ol>
   <li>If the scheme components differ, then the non-base argument is copied.</li>
@@ -763,7 +763,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 iri)<br>procedure</span>
   <code class="signature">(<a href="#update-iri-path" id="update-iri-path">update-iri-path</a> <var>iri</var> <var>obj</var>)</code><br>
 </div>
-<p>Update the path component of IRI <var>iri</var> with <var>obj</var>. If <var>obj</var> is <code>#f</code>, then the path to be set is the <a href="#empty-relative-path">empty path</a>. If <var>obj</var> is a path object, then any character not permissible within a valid IRI path is escaped as percent-encoded bytes corresponding to the charcter's UTF-8 octets. If <var>obj</var> is a string, then it is converted to a path object using a procedure equivalent to <code>string->path</code>, with any illegal characters again percent-encoded. Next, the <a href="#error-behaviour-of-setters">conditions associated with setting path</a> are tested for <var>iri</var> and the path object to be set, and if they do not hold, then an error is raised with both input arguments as irritants. An assertion violation is raised with <var>obj</var> as irritant if it is not a path object, a string, or <code>#f</code>.</p>
+<p>Update the path component of IRI <var>iri</var> with <var>obj</var>. If <var>obj</var> is <code>#f</code>, then the path to be set is the <a href="#empty-relative-path">empty path</a>. If <var>obj</var> is a path object, then any character not permissible within a valid IRI path is escaped as percent-encoded bytes corresponding to the charcter's UTF-8 octets. If <var>obj</var> is a string, then it is converted to a path object using a procedure equivalent to <code>string->path</code>, with any illegal characters again escaped as percent-encoded bytes. Next, the <a href="#error-behaviour-of-setters">conditions associated with setting path</a> are tested for <var>iri</var> and the path object to be set, and if they do not hold, then an error is raised with both input arguments as irritants. An assertion violation is raised with <var>obj</var> as irritant if it is not a path object, a string, or <code>#f</code>.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
@@ -878,19 +878,19 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#normalize-iri-case" id="normalize-iri-case">normalize-iri-case</a> <var>iri</var>)</code><br>
   <code class="signature">(<a href="#normalize-uri-case" id="normalize-uri-case">normalize-uri-case</a> <var>uri</var>)</code><br>
 </div>
-<p>Normalize case-insensitive components (scheme and host), and convert percent-encoded characters to canonical upper-case.</p>
+<p>Normalize case-insensitive components (scheme and host), and convert percent-encoded bytes to canonical upper-case.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 normalize)<br>procedure</span>
   <code class="signature">(<a href="#normalize-iri-escape" id="normalize-iri-escape">normalize-iri-escape</a> <var>iri</var>)</code><br>
 </div>
-<p>Normalize an IRI&rsquo;s escapes, potentially interpreting percent-encodings if part of valid UTF-8 octet sequences as characters. Conversely, characters which are not permissible within an URI component will appear as series of percent-encoded bytes corresponding to UTF-8 octets. This procedure is idempotent: a fully normalized IRI will be normalized to itself, and <code>iri-equal?</code> will hold true between the two.</p>
+<p>Normalize an IRI&rsquo;s escapes, potentially interpreting percent-encoded bytes if part of valid UTF-8 octet sequences as characters. Conversely, characters which are not permissible within an URI component will appear as series of percent-encoded bytes corresponding to UTF-8 octets. This procedure is idempotent: a fully normalized IRI will be normalized to itself, and <code>iri-equal?</code> will hold true between the two.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 normalize)<br>procedure</span>
   <code class="signature">(<a href="#normalize-uri-escape" id="normalize-uri-escape">normalize-uri-escape</a> <var>uri</var>)</code><br>
 </div>
-<p>Normalize an URI&rsquo;s escapes (percent-encodings), potentially interpreting percent-encodings as octets in U.S. ASCII. Conversely, characters which are not permissible within an URI component will appear as series of percent-encoded bytes corresponding to UTF-8 octets.</p>
+<p>Normalize an URI&rsquo;s escapes, potentially interpreting percent-encoded bytes as octets in U.S. ASCII. Conversely, characters which are not permissible within an URI component will appear as series of percent-encoded bytes corresponding to UTF-8 octets.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 normalize)<br>procedure</span>
@@ -921,7 +921,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#decode-string" id="decode-string">decode-string</a> <var>string</var>)</code><br>
   <code class="signature">(<a href="#decode-string-2" id="decode-string-2">decode-string</a> <var>string</var> <var>char-set</var>)</code><br>
 </div>
-<p>Process <var>string</var>, decoding any sequences of percent-encoded octets corresponding to characters in the optional character set <var>char-set</var>, which defaults to every character (SRFI 14 <a href="https://srfi.schemers.org/srfi-14/srfi-14.html#char-set:full"><code>char-set:full</code></a>). When a percent-encoded octet is part of an invalid sequence of UTF-8 octets, an error is raised with the <code>#\%</code> character and the start of the sequence in which the invalid sub-sequence occured as irritants.</p>
+<p>Process <var>string</var>, decoding any sequences of percent-encoded bytes as the corresponding UTF-8 octets for characters in the optional character set <var>char-set</var>, which defaults to every character (SRFI 14 <a href="https://srfi.schemers.org/srfi-14/srfi-14.html#char-set:full"><code>char-set:full</code></a>). When a percent-encoded byte is part of an invalid sequence of UTF-8 octets, an error is raised with the <code>#\%</code> character and the start of the sequence in which the invalid sub-sequence occured as irritants.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
@@ -931,7 +931,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#string-%3Erfc-absolute-iri" id="string-%3Erfc-absolute-iri">string->rfc-absolute-iri</a> <var>string</var>)</code><br>
 </div>
 
-<p><code>string->iri</code> parses <var>string</var> into an IRI. An error is raised with the failed character and its position in the string, in the following cases. First, this may occur when a character is not permitted within a given IRI component (unlike the string setters, there is no automatic escaping). Second, when a percent-encoded octet is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised. Finally, if the end of the string was prematurely encountered, then the irritants are the EOF object and the string <i>length</i>.</p>
+<p><code>string->iri</code> parses <var>string</var> into an IRI. An error is raised with the failed character and its position in the string, in the following cases. First, this may occur when a character is not permitted within a given IRI component (unlike the string setters, there is no automatic escaping). Second, when a percent-encoded byte is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised. Finally, if the end of the string was prematurely encountered, then the irritants are the EOF object and the string <i>length</i>.</p>
 <p><code>string->non-relative-iri</code> is a restriction on <code>string->iri</code> in that the scheme component is required. An error is raised with the EOF object and the string length as irritants if the scheme does not end with a colon, and with an illegal character and its position as irritants if this is contained within the scheme. Once a valid scheme has been parsed, the parse continues with the same behaviour as <code>string->iri</code>. This definition of a non-relative IRI (requirement of a scheme component) differs from the RFC 3987 <code>absolute-IRI</code> definition in that a fragment may appear, but we offer this procedure for convenience as many applications (like the RDF N-Triples concrete syntax) forbid relative references but permit non-relative IRIs to have fragment components.</p>
 <p>Definitions derived from RFC 3987 verbatim are <code>string->rfc-iri-reference</code> and <code>string->rfc-absolute-iri</code>. The former procedure behaves exactly like <code>string->iri</code> but the naming reflects RFC 3987's <a href="https://www.rfc-editor.org/info/rfc3987/#section-2.2"><code>IRI-reference</code></a> terminology. The latter procedure has the same error behaviour as <code>string->non-relative-iri</code> except that the fragment component is strictly forbidden. That is, if the hash character is parsed, then an error is raised with the hash character and its position in the string as irritants.</p>
 
@@ -1091,7 +1091,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 path)<br>procedure</span>
   <code class="signature">(<a href="#path-segments" id="path-segments">path-segments</a> <var>path</var>)</code><br>
 </div>
-<p>Serialise the internal segment encoding as a vector of (string) segments. The returned vector cannot be guaranteed to correspond to the internal structure, as there may be percent-encoded octets requiring a non-string encoding.</p>
+<p>Serialise the internal segment encoding as a vector of (string) segments. The returned vector cannot be guaranteed to correspond to the internal structure, as there may be percent-encoded bytes requiring a non-string encoding.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
@@ -1103,7 +1103,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 path)<br>procedure</span>
   <code class="signature">(<a href="#path-update" id="path-update">path-update</a> <var>path</var> <var>k</var> <var>string</var>)</code><br>
 </div>
-<p>Update segment of path <var>path</var> at index <code>k</code> with <var>string</var>. When a percent-encoded octet is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised.</p>
+<p>Update segment of path <var>path</var> at index <code>k</code> with <var>string</var>. When a percent-encoded byte is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
@@ -1133,7 +1133,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 path)<br>procedure</span>
   <code class="signature">(<a href="#string-%3Epath" id="string-%3Epath">string->path</a> <var>string</var>)</code><br>
 </div>
-<p>Parse <code>string</code> as a path. Both relative paths with a colon in the initial segment, and absolute paths with an empty initial segment, are permitted. When a percent-encoded octet is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised.</p>
+<p>Parse <code>string</code> as a path. Both relative paths with a colon in the initial segment, and absolute paths with an empty initial segment, are permitted. When a percent-encoded byte is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 path)<br>procedure</span>
@@ -1299,7 +1299,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 utils)<br>procedure</span>
   <code class="signature">(<a href="#percent-encoding-%3Estring" id="percent-encoding-%3Estring">percent-encoding->string</a> <var>k</var>)</code><br>
 </div>
-<p>Represent octet <var>k</var> (standing for a percent-encoding) as a string in its canonical, upper-case form <code>% 0-F 0-F</code>. An assertion violation is raised with <var>k</var> as irritant if it is not less than 256. Examples:</p>
+<p>Represent octet <var>k</var> (representing a percent-encoded byte) as a string in its canonical, upper-case form <code>% 0-F 0-F</code>. An assertion violation is raised with <var>k</var> as irritant if it is not an exact non-negative integer less than 256. Examples:</p>
   <pre>
 (percent-encoding->string #x40) → "%40"
 (percent-encoding->string #xFA) → "%FA"
@@ -1313,7 +1313,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 utils)<br>procedure</span>
   <code class="signature">(<a href="#percent-encoding-%3Eu8-list" id="percent-encoding-%3Eu8-list">percent-encoding->u8-list</a> <var>pct</var>)</code><br>
 </div>
-<p>Represent octet <var>k</var> (standing for a percent-encoding) as a list of UTF-8 octets corresponding to the canonical string representation of the percent-encoding. An assertion violation is raised with <var>k</var> as irritant if it is not less than 256. Examples:</p>
+<p>Represent octet <var>k</var> (reperesnting a percent-encoded byte) as a list of UTF-8 octets corresponding to the canonical string representation of the percent-encoded byte. An assertion violation is raised with <var>k</var> as irritant if it is not an exact non-negative integer less than 256. Examples:</p>
   <pre>
 (percent-encoding->u8-list #x40) → (#x25 #x34 #x30)
 (percent-encoding->u8-list #xFA) → (#x25 #x46 #x41)
@@ -1326,7 +1326,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <span class="category">(srfi :275 utils)<br>procedure</span>
   <code class="signature">(<a href="#percent-encoding-%3Ereverse-u8-list" id="percent-encoding-%3Ereverse-u8-list">percent-encoding->reverse-u8-list</a> <var>pct</var>)</code><br>
 </div>
-<p>Represent octet <var>k</var> (standing for a percent-encoding) as a list of UTF-8 octets corresponding to the canonical string representation of the percent-encoding, this time in reverse order. An assertion violation is raised with <var>k</var> as irritant if it is not less than 256.</p>
+<p>Represent octet <var>k</var> (reperesnting a percent-encoded byte) as a list of UTF-8 octets corresponding to the canonical string representation of the percent-encoded byte, this time in reverse order. An assertion violation is raised with <var>k</var> as irritant if it is not an exact non-negative integer less than 256.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 utils)<br>procedure</span>
@@ -1458,7 +1458,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
     <span class="remark">No equivalent for scheme as that only contains ASCII even in IRIs</span></dd>
 </dl>
 
-<h3 id="test-uri-escape-normalization">URI escape (percent-encoding) normalization test cases (<code>normalize-uri-escape</code>)</h3>
+<h3 id="test-uri-escape-normalization">URI escape (percent-encoded byte) normalization test cases (<code>normalize-uri-escape</code>)</h3>
 <dl class="test-cases">
   <dt>User reserved character not escaped</dt>
   <dd><code>&lt;http://my!name@example.org/ex#test&gt;</code>
@@ -1815,7 +1815,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 </dl>
 
 <h3 id="test-utf-8-interpretation">UTF-8 interpretation</h3>
-<p>In this section, we detail <i>negative</i> test cases which must be rejected. These go beyond the RFC 3986 and 3987 specifications which permit percent-encoded escapes which may correspond to invalid UTF-8 octet sequences. No encodings other than UTF-8 are supported. The following example cases are for the URI component. The same sequences <i>must</i> be rejected in every component in which percent-encoded escapes may appear (every component except scheme and port).</p>
+<p>In this section, we detail <i>negative</i> test cases which must be rejected. These go beyond the RFC 3986 and 3987 specifications which permit percent-encoded bytes which may correspond to invalid UTF-8 octet sequences. No encodings other than UTF-8 are supported. The following example cases are for the URI component. The same sequences <i>must</i> be rejected in every component in which percent-encoded bytes may appear (every component except scheme and port).</p>
 
 <dl class="test-cases">
   <dt>Encode all four byte lengths in a single call</dt>
