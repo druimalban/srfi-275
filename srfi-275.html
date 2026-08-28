@@ -261,7 +261,7 @@ SPDX-License-Identifier: MIT
 <h3 id="path-normalization">Path segment normalization</h3>
 <p>Path segment normalization is structurally identical for both URIs and IRIs. It interprets an entire path with respect to two control sequences: &lsquo;<code>.</code>&rsquo; (current working directory) and &lsquo;<code>..</code>&rsquo; (upper working directory), similar to UNIX paths. Unlike the other two normalization procedures, path segment normalization is <b>undefined for relative references</b>, because the path portion is not meaningful except during relative reference resolution.</p>
 <p>It should be noted that path segment normalization <b>is</b> defined for non-relative IRIs with relative paths, such as a URN like <code>&lt;foo:a/b/../.././../../e&gt;</code>. This is a major source of diversion between RFC 3986 implementations. This appears to arise from reusing the <a href="https://www.rfc-editor.org/info/rfc3986/#section-5.2.4">Remove Dot Segments</a> procedure as defined in RFC 3986 verbatim. In relative reference resolution, this procedure is <i>never</i> called on relative paths, only on absolute paths.</p>
-<p>For example, for the (non-relative) IRI <code>&lt;foo:a/b/../.././../../e&gt;</code>, implementations using the RFC 3986 procedure verbatim get <code>&lt;foo:/e&gt;</code>, whereas other implementations get <code>&lt;foo:e&gt;</code>. In the former camp are implementations like the Erlang/OTP system&rsquo;s built-in <code>uri_string</code> <a href="#erl-uri-string">[3]</a>, and Guile-RDF <a href="#guile-rdf">[4]</a>, whereas in the latter camp are implementations like Haskell&rsquo;s <code>network-uri</code> <a href="#hs-network-uri">[5]</a> and Chicken&rsquo;s <code>uri-generic</code> <a href="#chicken-uri-generic">[6]</a> and <code>uri-common</code> <a href="#chicken-uri-common">[7]</a> and  libraries. We are in the latter camp, and a fixed Remove Dot Segments procedure might be implemented as follows. The sample implementation internally represents raw segments as a vector of SRFI 160 <a href="#srfi-160">[10]</a> <code>u16vector</code> segments, and uses the SRFI 262 pattern matcher <a href="#srfi-262">[11]</a>.</p>
+<p>For example, for the (non-relative) IRI <code>&lt;foo:a/b/../.././../../e&gt;</code>, implementations using the RFC 3986 procedure verbatim get <code>&lt;foo:/e&gt;</code>, whereas other implementations get <code>&lt;foo:e&gt;</code>. In the former camp are implementations like the Erlang/OTP system&rsquo;s built-in <code>uri_string</code> <a href="#erlang-uri-string">[3]</a>, and Guile-RDF <a href="#guile-rdf">[4]</a>, whereas in the latter camp are implementations like Haskell&rsquo;s <code>network-uri</code> <a href="#hs-network-uri">[5]</a> and Chicken&rsquo;s <code>uri-generic</code> <a href="#chicken-uri-generic">[6]</a> and <code>uri-common</code> <a href="#chicken-uri-common">[7]</a> and  libraries. We are in the latter camp, and a fixed Remove Dot Segments procedure might be implemented as follows. The sample implementation internally represents raw segments as a vector of SRFI 160 <a href="#srfi-160">[10]</a> <code>u16vector</code> segments, and uses the SRFI 262 pattern matcher <a href="#srfi-262">[11]</a>.</p>
 <pre>
 (define (remove-dot-segments path)
   (let* ([undotted
@@ -309,7 +309,7 @@ SPDX-License-Identifier: MIT
   <li>If the authority components differ, then a relative reference is returned based on the non-base argument's fields.</li>
   <li>If the path components differ, then the two paths (after <a href="#path-normalization">normalizing dotted segments</a>) are compared in order to calculate a path relative to the base argument's path. A relative reference is returned using this relative path, with all three authority components unset (set to <code>#f</code>), and with the query and fragment of the non-base argument.</li>
   <li>If the query components differ, then a relative reference is returned with all three authority components unset, the empty path, and with the query and fragment of the non-base argument.</li>
-  <li>Exhausting the above cases implies that the path components are equal (and that <a href="#path-rfc-abempty?"><code>path-rfc-abempty?</code></a> holds. A relative reference is returned in which the authority components are unset, query is unset, and with the following path:
+  <li>Exhausting the above cases implies that the path components are equal (and that <a href="#iri-path-rfc-abempty?"><code>path-rfc-abempty?</code></a> holds. A relative reference is returned in which the authority components are unset, query is unset, and with the following path:
     <ol>
       <li>If there are no segments (single slash), use the path as-is</li>
       <li>If the final segment is empty, then use an absolute path with one segement, a single dot (&lsquo;<code>.</code>&rsquo;)</li>
@@ -971,6 +971,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#string-%3Enon-relative-uri" id="string-%3Enon-relative-uri">string->non-relative-uri</a> <var>string</var>)</code><br>
   <code class="signature">(<a href="#string-%3Erfc-uri-reference" id="string-%3Erfc-uri-reference">string->rfc-uri-reference</a> <var>string</var>)</code><br>
   <code class="signature">(<a href="#string-%3Erfc-absolute-uri" id="string-%3Erfc-absolute-uri">string->rfc-absolute-uri</a> <var>string</var>)</code><br>
+  <code class="signature">(<a href="#uri-%3Estring" id="uri-%3Estring">uri->string</a> <var>uri</var>)</code><br>
   <code class="signature">(<a href="#get-uri" id="get-uri">get-uri</a> <var>port</var>)</code><br>
   <code class="signature">(<a href="#get-uri-2" id="get-uri-2">get-uri</a> <var>port</var> <var>obj</var>)</code><br>
   <code class="signature">(<a href="#get-non-relative-uri" id="get-non-relative-uri">get-non-relative-uri</a> <var>port</var>)</code><br>
@@ -2008,7 +2009,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <ul id="references">
 <li>[1] <span id="rfc3986">RFC 3986: Universal Resource Identifiers (URIs). <a href="https://www.rfc-editor.org/info/rfc3986/">https://www.rfc-editor.org/info/rfc3986/</a></span></li>
 <li>[2] <span id="rfc3987">RFC 3987: Internationalized Resource Identifiers (IRIs). <a href="https://www.rfc-editor.org/info/rfc3987/">https://www.rfc-editor.org/info/rfc3987/</a></span></li>
-<li>[3] <span id="erl-uri-string">Erlang/OTP (n/d). <a href="https://www.erlang.org/docs/25/man/uri_string.html">URI processing functions.</a></span></li>
+<li>[3] <span id="erlang-uri-string">Erlang/OTP (n/d). <a href="https://www.erlang.org/docs/25/man/uri_string.html">URI processing functions.</a></span></li>
 <li>[4] <span id="guile-rdf">Julien Lepiller, 2020. <a href="https://framagit.org/tyreunom/guile-rdf/">Guile-RDF</a></span></li>
 <li>[5] <span id="hs-network-uri">Graham Klyne, 2004. <a href="https://github.com/haskell/network-uri">The <code>network-uri</code> package.</a></span></li>
 <li>[6] <span id="chicken-uri-generic">Ivan Raikov, Peter Bex, Seth Alves, 2008. <a href="https://wiki.call-cc.org/eggref/5/uri-generic"><code>uri-generic</code></a></span></li>
@@ -2017,7 +2018,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <li>[9] <span id="srfi-97">David Van Horn, 2008. <a href="https://srfi.schemers.org/srfi-97/">SRFI 97: SRFI Libraries</a></span></li>
 <li>[10] <span id="srfi-160">John Cowan, Shiro Kawai, 2008. <a href="https://srfi.schemers.org/srfi-160/">SRFI 160: Homogeneous numeric vector libraries</a></span></li>
 <li>[11] <span id="srfi-262">Daphne Preston-Kendal, 2025 (draft). <a href="https://srfi.schemers.org/srfi-262/">SRFI 262: Extensible pattern-matcher</a></span></li>
-<li>[12] <span id="java-25-uri">URI (Java SE 25 &amp; JDK 25). <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/net/URI.html">https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/net/URI.html</a></span></li>
+<li>[12] <span id="java-se25-uri">URI (Java SE 25 &amp; JDK 25). <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/net/URI.html">https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/net/URI.html</a></span></li>
 <li>[13] <span id="webkit">WebKit layout tests (n/d). <a href="https://github.com/WebKit/WebKit/blob/main/LayoutTests/fast/url/path-expected.txt">path-expected.txt</a></span></li>
 </ul>
 <h2 id="acknowledgements">Acknowledgements</h2>
