@@ -226,7 +226,7 @@ SPDX-License-Identifier: MIT
 
 <h2 id="error-behaviour-of-setters">Error behaviour of setters</h2>
 <p>Our design is to provide getters and setters which abstract away the internal representation, working on string representations of URI components. More generally, we suspect that existing implementations largely omit setters because preserving internal consistency is fairly cumbersome on the implementor and programmer, with validity of authority components being defined with respect to the path, and vice versa. The specific challenge is to ensure that setting a given component would not violate the URI grammar, as this may elicit a flat string representation which would have a different structure when parsed again.</p>
-<p>In order to set one of the three authority components safely on an IRI or URI, then the following conditions <i>must</i> hold with respect to the IRI or URI&rsquo;s existing path shape:<p>
+<p>In order to set one of the three authority components safely on an IRI or URI, then the following conditions <i>must</i> hold with respect to the IRI or URI&rsquo;s existing path shape:</p>
 <ol>
   <li>If the authority component becomes set (at least one of the three components are <b>not</b> <code>#f</code>), <a href="#rfc-path-abempty?"><code>rfc-path-abempty?</code></a> must hold against the path.</li>
   <li>If the authority component becomes unset (all of the three components are <code>#f</code>), and the IRI or URI is non-relative, then either <a href="#rfc-path-absolute?"><code>rfc-path-absolute?</code></a>, <a href="#rfc-path-rootless?"><code>rfc-path-rootless?</code></a> or <a href="#rfc-path-empty?"><code>rfc-path-empty?</code></a> must hold against the path.</li>
@@ -322,7 +322,7 @@ SPDX-License-Identifier: MIT
 <ol>
   <li>If the base path is empty, then copy the non-base path.</li>
   <li>If the non-base path is empty, return an empty relative path.</li>
-  <li>Partition both path arguments into a sequence of non-final segments, and the final segment.</i>
+  <li>Partition both path arguments into a sequence of non-final segments, and the final segment.</li>
   <li>Compare the two sequences of non-final segments to find the number of identical segments, <var>k</var>.</li>
   <li>Replace the first <var>k</var> segments in the non-base initial segment sequence with <var>k</var>&nbsp;&nbsp;&lsquo;<code>..</code>&rsquo; segments. This sequence is our candidate relativized path segments.</li>
   <li>This candidate sequence of relativized segments may be empty, and if so:
@@ -750,7 +750,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 <div class="feature">
   <span class="category">(srfi :275 iri)<br>procedure</span>
   <code class="signature">(<a href="#update-iri-authority" id="update-iri-authority">update-iri-authority</a> <var>iri</var> <var>#f</var>)</code><br>
-  <code class="signature">(<a href="#update-iri-authority" id="update-iri-authority">update-iri-authority</a> <var>iri</var> <var>user</var> <var>host</var> <var>port</var>)</code><br>
+  <code class="signature">(<a href="#update-iri-authority">update-iri-authority</a> <var>iri</var> <var>user</var> <var>host</var> <var>port</var>)</code><br>
 </div>
 <p>Combination procedure which subsumes the above procedures. If a single argument <code>#f</code> is given, then all three components will be set to <code>#f</code> providing this is not in conflict with path. If three arguments are given, then error behaviour is identical to the component-specific setters except that the check for conflict with the existing path is that setting all three to  would not be in conflict with the path shape.</p>
 
@@ -778,32 +778,32 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 uri)<br>procedure</span>
-  <code class="signature">(<a href="#uri?" id="uri?">uri?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#non-relative-uri?" id="non-relative-uri?">non-relative-uri?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#relative-uri?" id="relative-uri?">relative-uri?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#rfc-uri-reference?" id="rfc-uri-reference?">rfc-uri-reference?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#rfc-absolute-uri?" id="rfc-absolute-uri?">rfc-absolute-uri?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#empty-uri" id="empty-uri">empty-uri</a>)</code></br>
-  <code class="signature">(<a href="#uri-scheme" id="uri-scheme">uri-scheme</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-user" id="uri-user">uri-user</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-host" id="uri-host">uri-host</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-query" id="uri-query">uri-query</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-fragment" id="uri-fragment">uri-fragment</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-port" id="uri-port">uri-port</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path" id="uri-path">uri-path</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-authority" id="uri-authority">uri-authority</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-username+password" id="uri-username+password">uri-username+password</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-string" id="uri-path-string">uri-path-string</a> <var>uri</var>)</code></br>
-    <code class="signature">(<a href="#update-uri-scheme" id="update-uri-scheme">update-uri-scheme</a> <var>uri</var> <var>obj</var>)</code></br>
-  <code class="signature">(<a href="#update-uri-user" id="update-uri-user">update-uri-user</a> <var>uri</var> <var>obj</var>)</code></br>
-  <code class="signature">(<a href="#update-uri-host" id="update-uri-host">update-uri-host</a> <var>uri</var> <var>obj</var>)</code></br>
-  <code class="signature">(<a href="#update-uri-port" id="update-uri-port">update-uri-port</a> <var>uri</var> <var>obj</var>)</code></br>
-    <code class="signature">(<a href="#update-uri-path" id="update-uri-path">update-uri-path</a> <var>uri</var> <var>obj</var>)</code></br>
-  <code class="signature">(<a href="#update-uri-query" id="update-uri-query">update-uri-query</a> <var>uri</var> <var>obj</var>)</code></br>
-  <code class="signature">(<a href="#update-uri-fragment" id="update-uri-fragment">update-uri-fragment</a> <var>uri</var> <var>obj</var>)</code></br>
-    <code class="signature">(<a href="#update-uri-authority" id="update-uri-authority">update-uri-authority</a> <var>uri</var> <var>#f</var>)</code></br>
-    <code class="signature">(<a href="#update-uri-authority-2" id="update-uri-authority-2">update-uri-authority</a> <var>uri</var> user host port)</code></br>
-  <code class="signature">(<a href="#uri-equal?" id="uri-equal?">uri-equal?</a> <var>uri1</var> <var>uri2</var>)</code></br>
+  <code class="signature">(<a href="#uri?" id="uri?">uri?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#non-relative-uri?" id="non-relative-uri?">non-relative-uri?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#relative-uri?" id="relative-uri?">relative-uri?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#rfc-uri-reference?" id="rfc-uri-reference?">rfc-uri-reference?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#rfc-absolute-uri?" id="rfc-absolute-uri?">rfc-absolute-uri?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#empty-uri" id="empty-uri">empty-uri</a>)</code><br>
+  <code class="signature">(<a href="#uri-scheme" id="uri-scheme">uri-scheme</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-user" id="uri-user">uri-user</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-host" id="uri-host">uri-host</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-query" id="uri-query">uri-query</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-fragment" id="uri-fragment">uri-fragment</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-port" id="uri-port">uri-port</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path" id="uri-path">uri-path</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-authority" id="uri-authority">uri-authority</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-username+password" id="uri-username+password">uri-username+password</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-string" id="uri-path-string">uri-path-string</a> <var>uri</var>)</code><br>
+    <code class="signature">(<a href="#update-uri-scheme" id="update-uri-scheme">update-uri-scheme</a> <var>uri</var> <var>obj</var>)</code><br>
+  <code class="signature">(<a href="#update-uri-user" id="update-uri-user">update-uri-user</a> <var>uri</var> <var>obj</var>)</code><br>
+  <code class="signature">(<a href="#update-uri-host" id="update-uri-host">update-uri-host</a> <var>uri</var> <var>obj</var>)</code><br>
+  <code class="signature">(<a href="#update-uri-port" id="update-uri-port">update-uri-port</a> <var>uri</var> <var>obj</var>)</code><br>
+    <code class="signature">(<a href="#update-uri-path" id="update-uri-path">update-uri-path</a> <var>uri</var> <var>obj</var>)</code><br>
+  <code class="signature">(<a href="#update-uri-query" id="update-uri-query">update-uri-query</a> <var>uri</var> <var>obj</var>)</code><br>
+  <code class="signature">(<a href="#update-uri-fragment" id="update-uri-fragment">update-uri-fragment</a> <var>uri</var> <var>obj</var>)</code><br>
+    <code class="signature">(<a href="#update-uri-authority" id="update-uri-authority">update-uri-authority</a> <var>uri</var> <var>#f</var>)</code><br>
+    <code class="signature">(<a href="#update-uri-authority-2" id="update-uri-authority-2">update-uri-authority</a> <var>uri</var> user host port)</code><br>
+  <code class="signature">(<a href="#uri-equal?" id="uri-equal?">uri-equal?</a> <var>uri1</var> <var>uri2</var>)</code><br>
 </div>
 
 <p>Identical programming interfaces to that of IRIs are given for URIs, with <a href="#argument-restrictions">argument restriction</a> to the respective URI types, and with the repertoire of characters escaped by setters extended to characters permissible in a given IRI component, but not the equivalent URI component.</p>
@@ -1201,7 +1201,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#build-path-2" id="build-path-2">build-path</a> <var>base</var> <var>string1</var> ...)</code><br>
 </div>
 <p>Variadic procedure to build a path from a base path and any number of additional string segments. If no arguments are given, then the empty path is returned. This procedure corresponds to the <a href="https://docs.racket-lang.org/reference/Manipulating_Paths.html#%28def._%28%28quote._~23~25kernel%29._build-path%29%29">similarly-named Racket procedure</a>.</p>
-<p>If <var>base</var> is a string, then the procedure behaves like <a href="#vector->relative-path"><code>vector->relative-path</code></a>. If <var>base</var> is a path, then the procedure concatenates the base path with a relative path corresponding to the remaining segments. This is accomplished using the <a href="https://www.rfc-editor.org/info/rfc3986/#section-5.2.3"><code>merge-paths</code> procedure described in RFC 3986 section 5.3.2</a>. The slash character is always escaped within segments.</p>
+<p>If <var>base</var> is a string, then the procedure behaves like <a href="#vector-%3Erelative-path"><code>vector->relative-path</code></a>. If <var>base</var> is a path, then the procedure concatenates the base path with a relative path corresponding to the remaining segments. This is accomplished using the <a href="https://www.rfc-editor.org/info/rfc3986/#section-5.2.3"><code>merge-paths</code> procedure described in RFC 3986 section 5.2.3</a>. The slash character is always escaped within segments.</p>
 <p>By admitting the base as potentially another path, this allows one to build an absolute path from a list of segments, by choosing <code>(<a href="#empty-absolute-path">empty-absolute-path</a>)</code> as base.</p>
 <p>An error is raised if a segment is not a string, with the segment, and its position, as irritants. Additionally, if the initial segment (after expanding the <var>base</var> path) is empty, then an error is raised with the (string) segment and its position as irritants.</p>
 
@@ -1270,23 +1270,23 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category">(srfi :275 uri)<br>procedure</span>
-  <code class="signature">(<a href="#uri-path-absolute?" id="uri-path-absolute?">uri-path-absolute?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-relative?" id="uri-path-relative?">uri-path-relative?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-empty?" id="uri-path-empty?">uri-path-empty?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-rfc-abempty?" id="uri-path-rfc-abempty?">uri-path-rfc-abempty?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-rfc-absolute?" id="uri-path-rfc-absolute?">uri-path-rfc-absolute?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-rfc-rootless?" id="uri-path-rfc-rootless?">uri-path-rfc-rootless?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-rfc-noscheme?" id="uri-path-rfc-noscheme?">uri-path-rfc-noscheme?</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-rfc-empty?" id="uri-path-rfc-empty?">uri-path-rfc-empty?</a> <var>uri</var>)</code></br>
+  <code class="signature">(<a href="#uri-path-absolute?" id="uri-path-absolute?">uri-path-absolute?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-relative?" id="uri-path-relative?">uri-path-relative?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-empty?" id="uri-path-empty?">uri-path-empty?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-rfc-abempty?" id="uri-path-rfc-abempty?">uri-path-rfc-abempty?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-rfc-absolute?" id="uri-path-rfc-absolute?">uri-path-rfc-absolute?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-rfc-rootless?" id="uri-path-rfc-rootless?">uri-path-rfc-rootless?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-rfc-noscheme?" id="uri-path-rfc-noscheme?">uri-path-rfc-noscheme?</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-rfc-empty?" id="uri-path-rfc-empty?">uri-path-rfc-empty?</a> <var>uri</var>)</code><br>
 </div>
 
 <p>Helper procedures which call the path library&rsquo;s corresponding procedures for path shape of an URI. Unlike the equvialent path procedures, these raise an assertion violation with <var>ident</var> as irritant if it is not an URI.</p>
 
 <div class="feature">
   <span class="category">(srfi :275 uri)<br>procedure</span>
-  <code class="signature">(<a href="#uri-path-segments" id="uri-path-segments">uri-path-segments</a> <var>uri</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-segment-ref" id="uri-path-segment-ref">uri-path-segment-ref</a> <var>uri</var> <var>k</var>)</code></br>
-  <code class="signature">(<a href="#uri-path-segment-update" id="uri-path-segment-update">uri-path-segment-update</a> <var>uri</var> <var>k</var> <var>str</var>)</code></br>
+  <code class="signature">(<a href="#uri-path-segments" id="uri-path-segments">uri-path-segments</a> <var>uri</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-segment-ref" id="uri-path-segment-ref">uri-path-segment-ref</a> <var>uri</var> <var>k</var>)</code><br>
+  <code class="signature">(<a href="#uri-path-segment-update" id="uri-path-segment-update">uri-path-segment-update</a> <var>uri</var> <var>k</var> <var>str</var>)</code><br>
 </div>
 <p>Procedures which effectively wrap <a href="#path-segments"><code>path-segments</code></a>, <a href="#path-ref"><code>path-ref</code></a> and <a href="#path-ref"><code>path-update</code></a> respectively. In <code>iri-path-segment-update</code>, characters not permissible within an URI path segment will be automatically escaped.</p>
 
@@ -1706,7 +1706,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <dd><code>&lt;g#s/./x&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://a/b/c/g#s/./x&gt;</code></dd>
   <dd><code>&lt;g#s/../x&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://a/b/c/g#s/../x&gt;</code></dd>
 </dl>
-<p>Reference resolution <i>must</i> ensure that a path is never elicited which would be mistaken for the double slash after a scheme&rsquo;s colon. (The selected strategy is to prefix a <code>./</code> to the path, making it relative, but in principle prepending a slash to the segments i.e. after the initial slash, <code>/.///</code>, is equivalent.)<p>
+<p>Reference resolution <i>must</i> ensure that a path is never elicited which would be mistaken for the double slash after a scheme&rsquo;s colon. (The selected strategy is to prefix a <code>./</code> to the path, making it relative, but in principle prepending a slash to the segments i.e. after the initial slash, <code>/.///</code>, is equivalent.)</p>
 <dl class="test-cases">
   <dt>Base IRI <code>&lt;f:/a&gt;</code></dt>
   <dd><code>&lt;.//g&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;f:.///g&gt;</code></dd>
@@ -1750,7 +1750,6 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 </dl>
 
 <dl class="test-cases" id="uriswap-cases-klyne">
-  <dt>
   <dt>Base IRI <code>&lt;http://example/x/y%2Fz&gt;</code> (see <a href="https://lists.w3.org/Archives/Public/uri/2003Feb/0016.html">here</a>)</dt><dd><code>&lt;abc&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://example/x/abc&gt;</code></dd>
   <dt>Base IRI <code>&lt;http://example/x/y/z&gt;</code> (see <a href="https://lists.w3.org/Archives/Public/uri/2003Feb/0016.html">here</a>)</dt><dd><code>&lt;../../x%2Fabc&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://example/x%2Fabc&gt;</code></dd>
   <dt>Base IRI <code>&lt;http://example/x/y%2Fz&gt;</code> (see <a href="https://lists.w3.org/Archives/Public/uri/2003Feb/0016.html">here</a>)</dt><dd><code>&lt;../x%2Fabc&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://example/x%2Fabc&gt;</code></dd>
@@ -1758,7 +1757,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <dt>Base IRI <code>&lt;http://example/x/abc.efg&gt;</code></dt><dd><code>&lt;.&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://example/x/&gt;</code></dd>
 </dl>
 
-<p>The following test cases are derived from the Haskell <code>network-uri</code> <a href="#hs-network-uri">[5]</a> package. These tests are formatted here as base URI or IRI, relative reference, and expected result. The first set of cases are tricky cases of non-relative paths together with query and fragment.</dt></p>
+<p>The following test cases are derived from the Haskell <code>network-uri</code> <a href="#hs-network-uri">[5]</a> package. These tests are formatted here as base URI or IRI, relative reference, and expected result. The first set of cases are tricky cases of non-relative paths together with query and fragment.</p>
 <dl class="test-cases" id="hs-networkuri-cases">
   <dt>Base IRI <code>&lt;mailto:local1@domain1?query1&gt;</code></dt><dd><code>&lt;local2@domain2&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;mailto:local2@domain2&gt;</code></dd>
   <dt>Base IRI <code>&lt;mailto:local1@domain1&gt;</code></dt><dd><code>&lt;local2@domain2?query2&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;mailto:local2@domain2?query2&gt;</code></dd>
@@ -1769,7 +1768,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <dt>Base IRI <code>&lt;foo:bar&gt;</code></dt><dd><code>&lt;http://example/a/b?c/../d&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://example/a/b?c/../d&gt;</code></dd>
   <dt>Base IRI <code>&lt;foo:bar&gt;</code></dt><dd><code>&lt;http://example/a/b#c/../d&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://example/a/b#c/../d&gt;</code></dd>
 </dl>
-<p>The remaining set of tests from <code>network-uri</code> <a href="#hs-network-uri">[5]</a> are with respect to dealing with the final segment when inverting (see <a href="#test-reference-extraction">next section</a>). See <a href="http://lists.w3.org/Archives/Public/uri/2005Jul/0013">here</a>. These test cases are not exactly invertible, however as they do not all produce the exact same reference due to relative segments.</dt></p>
+<p>The remaining set of tests from <code>network-uri</code> <a href="#hs-network-uri">[5]</a> are with respect to dealing with the final segment when inverting (see <a href="#test-reference-extraction">next section</a>). See <a href="http://lists.w3.org/Archives/Public/uri/2005Jul/0013">here</a>. These test cases are not exactly invertible, however as they do not all produce the exact same reference due to relative segments.</p>
 <dl class="test-cases" id="hs-networkuri-cases-2">
   <dt>Base IRI <code>&lt;http://www.example.com/data/limit/..&gt;</code></dt><dd><code>&lt;test.xml&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;http://www.example.com/data/limit/test.xml&gt;</code></dd>
   <dt>Base IRI <code>&lt;file:/some/dir/foo&gt;</code></dt><dd><code>&lt;./#blort&gt;</code>&emsp;&emsp;&rarr;&emsp;&emsp;<code>&lt;file:/some/dir/#blort&gt;</code></dd>
