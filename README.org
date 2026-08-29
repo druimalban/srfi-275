@@ -1,7 +1,7 @@
 
 # SPDX-FileCopyrightText: 2026 Arthur A. Gleckler
 # SPDX-License-Identifier: MIT
-* SRFI 275: URIs and IRIs
+* SRFI 275: URIs, IRIs, and basic paths
 
 ** by Duncan Guthrie
 
@@ -9,7 +9,7 @@
 
 keywords: [[https://srfi.schemers.org/?keywords=data-structure][Data Structure]]
 
-This repository hosts [[https://srfi.schemers.org/srfi-275/][SRFI 275]]: URIs and IRIs, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
+This repository hosts [[https://srfi.schemers.org/srfi-275/][SRFI 275]]: URIs, IRIs, and basic paths, a [[https://srfi.schemers.org/][Scheme Request for Implementation]].
 
 This SRFI is in /draft/ status.
 
