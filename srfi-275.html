@@ -41,8 +41,8 @@ SPDX-License-Identifier: MIT
   <li><a href="#rationale">Rationale</a></li>
   <li><a href="#whatwg">RFC 3986 and 3987 over the WHATWG &ldquo;living standard&rdquo;</a></li>
   <li><a href="#polymorphic-procedures">Relative references and polymorphic procedures</a></li>
-  <li><a href="#record-type-presentation">A record type presentation</a></li>
-  <li><a href="#purely-functional-interface">A purely-functional interface</a></li>
+  <li><a href="#structured-presentation">A structured presentation</a></li>
+  <li><a href="#persistent-interface">A persistent interface</a></li>
   <li><a href="#error-behaviour-of-setters">Error behaviour of setters</a></li>
   <li>
     <a href="#normalization">Normalization</a>
@@ -106,17 +106,17 @@ SPDX-License-Identifier: MIT
 <h2 id="whatwg">RFC 3986 and 3987 over the WHATWG &ldquo;living standard&rdquo;</h2>
 
 <p>RFC 3986 and 3987 (2005) are the most recent standards proposed by the IETF, but the WHATWG also publish the URL Living Standard <a href="#whatwg-url-standard">[14]</a>. The most dramatic change is to eschew the formal grammar defined in RFC 3986 in favour of a long-form text description of a parsing strategy. This arguably makes it difficult for implementors to verify correctness, or to select a processing strategy most appropriate to their implementation (data structures, parsing techniques). It is difficult to understand how RFC 3986 and the WHATWG specification diverge, and the WHATWG approach represents much more of a moving target than the IETF processes of deprecation. Finally, there is no successor proposal for IRIs, which remain current in recent standards such as JSON-LD (2020) <a href="#json-ld11">[15]</a>. These issues are discussed here <a href="#an-appeal-to-the-whatwg">[16]</a>, and the proliferation of different, competing standards are discussed here <a href="#draft-ruby-url-problem-01">[17]</a>.</p>
-<p>We do however incorporate one part of the WHATWG standard: escapes (percent-encodings) are referred to as percent-encoded bytes.</p>
+<p>We do however incorporate one part of the WHATWG standard: escapes (percent-encodings) are referred to as percent-encoded bytes, as this terminology more clearly distinguishes the escape from the interpretation (e.g. as a UTF-8 octet).</p>
 
 <h2 id="polymorphic-procedures">Relative references and polymorphic procedures</h2>
 
-<p>RFC 3986 and 3987 distinguish URIs and IRIs, respectively, from their <b>relative references</b>, which must be resolved against a base URI or IRI in order to be used. The main application of relative references is to allow one to refer to resources and author documents without knowing the final publishing location. For example, a graph database may produce RDF documents specified in RDF/XML, where resources are denoted with IRI-relative references, assuming that these documents would be interchanged with another system which mints full IRIs with respect to its hosting location.</p>
+<p>RFC 3986 and 3987 distinguish URIs and IRIs, respectively, from their <a href="https://www.rfc-editor.org/info/rfc3986/#section-4.2">relative references</a>, which must be resolved against a base URI or IRI in order to be used. The main application of relative references is to allow one to refer to resources and author documents without knowing the final publishing location. For example, a graph database may produce RDF documents specified in RDF/XML, where resources are denoted with IRI-relative references, assuming that these documents would be interchanged with another system which mints full IRIs with respect to its hosting location.</p>
 
 <p>Somewhat confusingly, RFC 3986 defines <a href="https://www.rfc-editor.org/info/rfc3986/#section-4.1">&ldquo;URI-reference&rdquo;</a> as the most common usage of URI: either an URI or a relative reference. We follow this common usage by developing polymorphic getters and setters which work on URIs and relative references, with the predicate <a href="#uri?"><code>uri?</code></a> holding true for both URIs and relative references. This procedure would hence correspond to testing for an RFC 3986 <a href="https://www.rfc-editor.org/info/rfc3986/#section-4.1">&ldquo;URI-reference&rdquo;</a>. (RFC 3987 follows an identical convention for IRIs and their relative references, so the same approach is followed for IRIs.)</p>
 
-<p>The most divergent behaviour between widespread implementations of URIs and IRIs has been with respect to normalization of relative references. We explicitly avoid defining path segment normalization for relative references (regardless of whether the <i>path</i> is absolute or relative) because the behaviour is largely undefined by RFC 3986 and 3987 or any current RFC. See <a href="#normalization">the section on normalization</a> for more details, and <a href="#test-suite">the test suite</a>.</p>
+<p>The most divergent behaviour between widespread implementations of URIs and IRIs has been with respect to normalization of relative references. We explicitly avoid defining path segment normalization for relative references (regardless of whether the <i>path</i> is absolute or relative) because the behaviour is largely undefined by RFC 3986 and 3987 or any other current specification. See <a href="#normalization">the section on normalization</a> for more details, and <a href="#test-suite">the test suite</a>.</p>
 
-<h2 id="record-type-presentation">A record type presentation</h2>
+<h2 id="structured-presentation">A structured presentation</h2>
 
 <p>URIs and IRIs are structured data. Of course, record types are convenient as they generate dedicated getters and setters. More importantly, however, we think that record structures are necessary in this case for normalization procedures to be structure-preserving. Specifically, normalization procedures may alter the path, such that its segments may be mistaken for other parts of the URI or IRI, such as the <code>&lt;://&gt;</code> portion separating scheme from authority, or for the hostname. Updates to authority components or to the path need to similarly ensure that they produce valid URIs and IRIs when serialized (see <a href="#error-behaviour-of-setters">below</a>).</p>
 
@@ -124,11 +124,11 @@ SPDX-License-Identifier: MIT
 
 <p>A string representation of an URI or IRI (procedures <a href="#uri-%3Estring"><code>uri->string</code></a> and <a href="#string-%3Eiri"><code>iri->string</code></a>) is produced by concatenating string representations of the individual fields (scheme, hostname &amp;c.), with the expected separators between components. For efficiency, no assumption should be made that the contents of individual fields can be checked at this point, which typically would involve additional, redundant parsing.</p>
 
-<h2 id="purely-functional-interface">A purely functional interface</h2>
+<h2 id="persistent-interface">A persistent interface</h2>
 
-<p>We require implementations to provide a purely-functional interface to URIs and IRIs, but not an in-place interface. The reasoning for this is that if implementors choose data structures optimized to purely-functional programming, it is more cumbersome to create an impure interface, whereas it is not as cumbersome for implementors to create a (potentially inefficient) purely-functional interface by copying the URI or IRI before updating in-place.</p>
+<p>We require implementations to provide persistent (a.k.a. functional) updaters for URIs and IRIs, but not an in-place interface. We reason that if implementors choose persistent data structures, it may be cumbersome to create an impure interface, whereas it is not as cumbersome for implementors to create a (potentially inefficient) functional interface by copying the URI or IRI before updating in-place.</p>
 
-<p>If an implementation provides disjoint mutable and immutable URI and IRI variants, then it is an error to call the in-place setters on an immutable variant, but the in-place variants should otherwise have equivalent error handling to the purely-functional variants.</p>
+<p>If an implementation provides disjoint mutable and immutable URI and IRI variants, then it is an error to call the in-place setters on an immutable variant, but the in-place variants should otherwise have equivalent error handling to the persistent variants.</p>
 
 <h2 id="error-behaviour-of-setters">Error behaviour of setters</h2>
 
@@ -266,7 +266,7 @@ SPDX-License-Identifier: MIT
   <li>If the initial segment is empty, the path is absolute, comprized of any non-initial segments.</li>
   <li>Otherwise, the path is a relative path using the segments calculated above.</li>
 </ol>
-<p>Indeed, treatment of (relative) path segments with an empty initial segment as an absolute path is also required of normalization procedures which elicit path objects, e.g. <a href="#remove-dot-segments">remove-dot-segments</a>). Additionally, the relativization procedures check that the path was settable given the authority component, and will prepend <code>./</code> to paths with a leading double slash given no authority component being set (see <a href="#test-reference-extraction">here</a>).</p>
+<p>Indeed, treatment of (relative) path segments with an empty initial segment as an absolute path is also required of normalization procedures which elicit path objects, e.g. <a href="#remove-dot-segments"><code>remove-dot-segments</code></a>). Additionally, the relativization procedures check that the path was settable given the authority component, and will prepend <code>./</code> to paths with a leading double slash given no authority component being set (see <a href="#test-reference-extraction">here</a>).</p>
 
 <h2 id="ip-literals">Treatment of IP literals</h2>
 
@@ -275,8 +275,7 @@ SPDX-License-Identifier: MIT
 <h2 id="basic-paths">Basic paths</h2>
 
 <p>We additionally specify a basic path sub-library. Paths can be considered vectors of segments which are tagged with whether they have a leading slash (an absolute path). The character set allowed within these paths is equivalent to the characters permissible within an URI or within the range of the universal character set (UCS) permitted within an IRI path segment. This restriction is important because it excludes a number of control characters and characters which can never be typed.</p>
-
-<p>The basic path library specifies the basic operations of path creation from sets of segments (<a href="#build-path"><code>build-path</code></a>), subscripting (<a href="#path-ref"><code>path-ref</code></a>), functional updates (<a href="#path-update"><code>path-update</code></a>), and count of segments (<a href="#path-length"><code>path-length</code></a>). We go a little further and provide utility procedures for path shape (the variants in the RFC 3986 and 3987 ABNF), and for copying paths. Finally, this design allows us to explicitly expose in the programming interface generalist procedures inherited from RFC 3986, such as <a href="#merge-paths"><code>merge-paths</code></a> and <a href="#remove-dot-segments"><code>remove-dot-segments</code></a>.</p>
+<p>Basic operations specified include path creation from sets of segments, subscripting, persistent updates, and count of segments. We go a little further and provide utility procedures for path shape (the variants in the RFC 3986 and 3987 ABNF), and for copying paths. Finally, this design allows us to explicitly expose in the programming interface generalist procedures inherited from RFC 3986 (e.g. <a href="#remove-dot-segments"><code>remove-dot-segments</code></a>).</p>
 
 <h2 id="rnrs-conditions">R<sup>6</sup>RS conditions</h2>
 
@@ -704,7 +703,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#update-iri-scheme" id="update-iri-scheme">update-iri-scheme</a> <var>non-relative-iri</var> <var>string</var>)</code><br>
 </div>
 
-<p>Purely-functional setter for the scheme component of non-relative IRI <var>non-relative-iri</var>, encoding the string <var>string</var>. During parsing, an error is raised if a character cannot be contained within a scheme at that position, with the character, its position in the IRI, and the IRI as irritants. Unlike the other setters for IRI components to follow, setting the scheme to <code>#f</code> or the empty string is not possible becasue it would imply that the IRI is a relative reference.</p>
+<p>Persistent setter for the scheme component of non-relative IRI <var>non-relative-iri</var>, encoding the string <var>string</var>. During parsing, an error is raised if a character cannot be contained within a scheme at that position, with the character, its position in the IRI, and the IRI as irritants. Unlike the other setters for IRI components to follow, setting the scheme to <code>#f</code> or the empty string is not possible becasue it would imply that the IRI is a relative reference.</p>
 
 <div class="feature">
   <span class="category"><code>(srfi :275 iri)</code><br>procedure</span>
@@ -713,7 +712,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#update-iri-port" id="update-iri-port">update-iri-port</a> <var>iri</var> <var>obj</var>)</code><br>
 </div>
 
-<p>Purely-functional setters to set a respective authority components of IRI <var>iri</var> to <var>obj</var>. These procedures check that the authority component after being set to <var>obj</var> is not in conflict with the shape of the existing path. For instance, relative paths cannot usually be set when either of the authority components are set. The <a href="#error-behaviour-of-setters">conditions associated with setting any authority component</a> with the two input arguments are tested, and if they do not hold, then an error is raised with the input arguments as irritants.</p>
+<p>Persistent setters to set a respective authority components of IRI <var>iri</var> to <var>obj</var>. These procedures check that the authority component after being set to <var>obj</var> is not in conflict with the shape of the existing path. For instance, relative paths cannot usually be set when either of the authority components are set. The <a href="#error-behaviour-of-setters">conditions associated with setting any authority component</a> with the two input arguments are tested, and if they do not hold, then an error is raised with the input arguments as irritants.</p>
 <p>In <code>update-iri-user</code> and <code>update-iri-host</code>, if <var>obj</var> is not <code>#f</code> and is a string, then it will be parsed for the respective component. Any character which cannot be contained within the component will be encoded as a sequence of percent-encoded bytes. When a percent-encoded byte is part of an invalid sequence of UTF-8 octets, an error consistent with <a href="#utf8-%3Estring/raise"><code>utf8->string/raise</code></a> is raised. In <code>update-iri-port</code>, if <var>obj</var> is not <code>#f</code> and is a non-negative integer, then it will be set-as is, otherwise <code>#f</code>. An assertion violation is raised with <code>obj</code> as irritant if it is not of the expected type just discussed or <code>#f</code>.</p>
 
 <div class="feature">
@@ -728,7 +727,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#update-iri-query" id="update-iri-query">update-iri-query</a> <var>iri</var> <var>obj</var>)</code><br>
   <code class="signature">(<a href="#update-iri-fragment" id="update-iri-fragment">update-iri-fragment</a> <var>iri</var> <var>obj</var>)</code><br>
 </div>
-<p>Purely-functional setters for the query and fragment components of an IRI. Error behaviour is identical to <code>update-uri-user</code>, except that there is no check that these are in conflict with the path shape.</p>
+<p>Persistent setters for the query and fragment components of an IRI. Error behaviour is identical to <code>update-uri-user</code>, except that there is no check that these are in conflict with the path shape.</p>
 
 <div class="feature">
   <span class="category"><code>(srfi :275 iri)</code><br>procedure</span>
@@ -783,7 +782,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#resolve-iri" id="resolve-iri">resolve-iri</a> <var>base</var> <var>iri</var>)</code><br>
 </div>
 
-<p>Relative reference resolution of <var>iri</var> against base IRI <var>base</var>. This procedure is purely-functional as it (usually) involves transforming a relative reference into an IRI. An assertion violation is raised with irritant <var>base</var> if it is not a <i>non-relative</i> IRI. Simple examples derived from the RDF Turtle test cases (see <a href="#test-reference-resolution">test suite section</a>):</p>
+<p>Relative reference resolution of <var>iri</var> against base IRI <var>base</var>. This procedure is functional as it (usually) involves transforming a relative reference into an IRI. An assertion violation is raised with irritant <var>base</var> if it is not a <i>non-relative</i> IRI. Simple examples derived from the RDF Turtle test cases (see <a href="#test-reference-resolution">test suite section</a>):</p>
 <pre>
 (define string-cases (list "g:h" "g" "./g" "g/" "/g" "//g"))
 
@@ -841,7 +840,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <h3 id="normalization-2">Normalization</h3>
 
-<p>The following procedures are purely-functional and structure preserving on the level of components, to avoid some of the problems with string representations being parsed differently post-normalization.</p>
+<p>The following procedures are functional and structure preserving on the level of components, to avoid some of the problems with string representations being parsed differently post-normalization.</p>
 
 <div class="feature">
   <span class="category"><code>(srfi :275 normalize)</code><br>procedure</span>
@@ -1283,7 +1282,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category"><code>(srfi :275 utils)</code><br>procedure</span>
-  <code class="signature">(<a href="#percent-encoding-%3Eu8-list" id="percent-encoding-%3Eu8-list">percent-encoding->u8-list</a> <var>pct</var>)</code><br>
+  <code class="signature">(<a href="#percent-encoding-%3Eu8-list" id="percent-encoding-%3Eu8-list">percent-encoding->u8-list</a> <var>k</var>)</code><br>
 </div>
 <p>Represent octet <var>k</var> (reperesnting a percent-encoded byte) as a list of UTF-8 octets corresponding to the canonical string representation of the percent-encoded byte. An assertion violation is raised with <var>k</var> as irritant if it is not an exact non-negative integer less than 256. Examples:</p>
 <pre>
@@ -1296,7 +1295,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <div class="feature">
   <span class="category"><code>(srfi :275 utils)</code><br>procedure</span>
-  <code class="signature">(<a href="#percent-encoding-%3Ereverse-u8-list" id="percent-encoding-%3Ereverse-u8-list">percent-encoding->reverse-u8-list</a> <var>pct</var>)</code><br>
+  <code class="signature">(<a href="#percent-encoding-%3Ereverse-u8-list" id="percent-encoding-%3Ereverse-u8-list">percent-encoding->reverse-u8-list</a> <var>k</var>)</code><br>
 </div>
 <p>Represent octet <var>k</var> (reperesnting a percent-encoded byte) as a list of UTF-8 octets corresponding to the canonical string representation of the percent-encoded byte, this time in reverse order. An assertion violation is raised with <var>k</var> as irritant if it is not an exact non-negative integer less than 256.</p>
 

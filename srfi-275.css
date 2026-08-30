@@ -188,6 +188,9 @@ dl.procs dt {
 dl.procs dd + dt {
     margin-top: 18px;
 }
+dl.procs dd + dd {
+    margin-top: 6pt;
+}
 dl.procs dd {
     margin-left: 0;
     white-space: nowrap;
