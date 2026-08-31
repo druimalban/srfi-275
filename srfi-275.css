@@ -351,7 +351,9 @@ ol#references li::before {
     width: 2.5em;
     margin-left: -2em;
 }
-/* Shift arrow to the right so it isn't overlayed on the bracketed number */
+/* Shift arrow below so it isn't overlayed on the bracketed number.
+   This works as the refenence link is now on a newline, after the authors,
+    so the arrow shows up immediately below the reference index. */
 ol#references li :target::before {
   top: +24pt;
 }
