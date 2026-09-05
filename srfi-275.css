@@ -248,21 +248,9 @@ p var {
 p code {
     white-space: nowrap;
 }
-p a {
-    font-family: 'URW Classic Sans', sans-serif;
-    font-weight: normal;
-    font-style: normal;
-}
-p a code {
-    font-weight: normal;
-}
+
 li code {
     white-space: nowrap;
-}
-li a {
-    font-family: 'URW Classic Sans', sans-serif;
-    font-weight: normal;
-    font-style: normal;
 }
 li a code {
     font-weight: normal;
