@@ -105,7 +105,7 @@ SPDX-License-Identifier: MIT
 
 <h2 id="whatwg">RFC 3986 and 3987 over the WHATWG &ldquo;living standard&rdquo;</h2>
 
-<p>RFC 3986 and 3987 (2005) are the most recent standards proposed by the IETF, but the WHATWG also publish the URL Living Standard <a href="#whatwg-url-standard">[3]</a>. The most dramatic change is to eschew the formal grammar defined in RFC 3986 in favour of a long-form text description of a parsing strategy. This arguably makes it difficult for implementors to verify correctness, or to select a processing strategy most appropriate to their implementation (data structures, parsing techniques). It is difficult to understand how RFC 3986 and the WHATWG specification diverge, and the WHATWG approach represents much more of a moving target than the IETF processes of deprecation. Finally, there is no successor proposal for IRIs, which remain current in recent standards such as JSON-LD (2020) <a href="#json-ld11">[15]</a>. These issues are discussed here <a href="#an-appeal-to-the-whatwg">[20]</a>, and the proliferation of different, competing standards are discussed here <a href="#draft-ruby-url-problem-01">[5]</a>.</p>
+<p>RFC 3986 and 3987 (2005) are the most recent standards proposed by the IETF, but the WHATWG also publish the URL Living Standard <a href="#whatwg-url-standard">[3]</a>. The most dramatic change is to eschew the formal grammar defined in RFC 3986 in favour of a long-form text description of a parsing strategy. This arguably makes it difficult for implementors to verify correctness, or to select a processing strategy most appropriate to their implementation (data structures, parsing techniques). It is difficult to understand how RFC 3986 and the WHATWG specification diverge, and the WHATWG approach represents much more of a moving target than the IETF processes of deprecation. Finally, there is no successor proposal for IRIs, which remain current in recent standards such as JSON-LD (2020) <a href="#json-ld11">[5]</a>. These issues are discussed here <a href="#an-appeal-to-the-whatwg">[20]</a>, and the proliferation of different, competing standards are discussed here <a href="#draft-ruby-url-problem-01">[21]</a>.</p>
 <p>We do however incorporate one part of the WHATWG standard: escapes (percent-encodings) are referred to as percent-encoded bytes, as this terminology more clearly distinguishes the escape from the interpretation (e.g. as a UTF-8 octet).</p>
 
 <h2 id="polymorphic-procedures">Relative references and polymorphic procedures</h2>
@@ -1998,7 +1998,7 @@ example-IRI → &lt;http://example.org:80/ex#IRI&gt;
 
 <h2 id="implementation">Implementation</h2>
 
-<p><a href="https://codeberg.org/dguthrie/scheme-iri">The sample implementation</a> targets Chez Scheme and is written in (mostly) portable R<sup>6</sup>RS. It imports various SRFIs from the <a href="https://github.com/arcfide/chez-srfi">Chez-SRFI</a> grab-bag. At the time of writing, the only external dependency is the sample implementation of the draft SRFI 262 pattern matcher <a href="#srfi-262">[11]</a>.</p>
+<p><a href="https://codeberg.org/dguthrie/scheme-iri">The sample implementation</a> targets Chez Scheme and is written in (mostly) portable R<sup>6</sup>RS. It imports various SRFIs from the <a href="https://github.com/arcfide/chez-srfi">Chez-SRFI</a> grab-bag. At the time of writing, the only external dependency is the sample implementation of the draft SRFI 262 pattern matcher <a href="#srfi-262">[17]</a>.</p>
 
 <h2 id="bibliography">References</h2>
 
