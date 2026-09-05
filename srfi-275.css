@@ -6,57 +6,65 @@ SPDX-License-Identifier: MIT
 /*
    Bitstream Charter is licensed as follows: https://mirror.apps.cam.ac.uk/pub/tex-archive/fonts/charter/readme.charter
 
-   These fonts are base64 encoded from Debian packaging of the Texlive opentype fonts:
+   These fonts are from the Debian packaging of the Texlive opentype fonts:
    https://packages.debian.org/sid/texlive-fonts-extra
 
-   Source package was 2026.20260711-2, as retrieved 30 August 2026.
+   The source package was 2026.20260711-2, as retrieved 30 August 2026.
 */
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: normal;
     font-weight: bold;
-    src: url("XCharter-Bold.woff2");
+    src: local("Charter"),
+         local("Bitstream Charter"),
+         url("XCharter-Bold.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: italic;
     font-weight: bold;
-    src: url("XCharter-BoldItalic.woff2");
+    src: local("Charter"),
+         local("Bitstream Charter"),
+         url("XCharter-BoldItalic.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: normal;
     font-weight: normal;
-    src: url("XCharter-Roman.woff2");
+    src: local("Charter"),
+         local("Bitstream Charter"),
+         url("XCharter-Roman.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: italic;
     font-weight: normal;
-    src: url("XCharter-Italic.woff2");
+    src: local("Charter"),
+         local("Bitstream Charter"),
+         url("XCharter-Italic.woff2");
 }
 /*
    Roboto Mono is licensed under the SIL Open Font License, Version 1.1.
 
-   These fonts are base64 encoded from the Google Fonts site, as retrieved 30 August 2026.
+   These fonts were retrieved from the Google Fonts site 30 August 2026.
 */
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "Roboto Mono";
     font-style: normal;
     font-weight: normal;
     src: url("RobotoMono-Regular.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "Roboto Mono";
     font-style: italic;
     font-weight: normal;
-    src: url("RobotoMonoItalic.woff2");
+    src: url("RobotoMono-Italic.woff2");
 }
 /*
    From the r7rs.org CSS:
@@ -72,32 +80,32 @@ SPDX-License-Identifier: MIT
    These fonts are base64 encoded from GhostPDL 10.07.1, as retrieved 30 August 2026.
 */
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: normal;
     font-weight: bold;
     src: url("URWClassicSans-Bold.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: italic;
     font-weight: bold;
     src: url("URWClassicSans-BoldItalic.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: normal;
     font-weight: normal;
     src: url("URWClassicSans-Regular.woff2");
 }
 @font-face {
-    font-display: "optional";
+    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: italic;
     font-weight: normal;
-    src: url("URWClassicSans-Italic.woff2");
+    src: url("URWClassicSans-RegularIt.woff2");
 }
 
 @media (prefers-color-scheme: light) {
@@ -361,6 +369,7 @@ ol#references li::before {
     width: 2.5em;
     margin-left: -2em;
 }
+
 /* Shift arrow below so it isn't overlayed on the bracketed number.
    This works as the refenence link is now on a newline, after the authors,
     so the arrow shows up immediately below the reference index. */
