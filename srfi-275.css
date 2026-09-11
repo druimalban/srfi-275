@@ -19,6 +19,7 @@ SPDX-License-Identifier: MIT
          local("Bitstream Charter-Bold"),
          url("XCharter-Bold.woff2");
 }
+
 @font-face {
     font-family: "Bitstream Charter";
     font-style: italic;
@@ -27,6 +28,7 @@ SPDX-License-Identifier: MIT
          local("Bitstream Charter-BoldItalic"),
          url("XCharter-BoldItalic.woff2");
 }
+
 @font-face {
     font-family: "Bitstream Charter";
     font-style: normal;
@@ -35,6 +37,7 @@ SPDX-License-Identifier: MIT
          local("Bitstream Charter"),
          url("XCharter-Roman.woff2");
 }
+
 @font-face {
     font-family: "Bitstream Charter";
     font-style: italic;
@@ -43,6 +46,7 @@ SPDX-License-Identifier: MIT
          local("Bitstream Charter-Italic"),
          url("XCharter-Italic.woff2");
 }
+
 /*
    Roboto Mono is licensed under the SIL Open Font License, Version 1.1.
 
@@ -54,12 +58,14 @@ SPDX-License-Identifier: MIT
     font-weight: normal;
     src: url("RobotoMono-Regular.woff2");
 }
+
 @font-face {
     font-family: "Roboto Mono";
     font-style: italic;
     font-weight: normal;
     src: url("RobotoMono-Italic.woff2");
 }
+
 /*
    From the r7rs.org CSS:
 
@@ -79,18 +85,21 @@ SPDX-License-Identifier: MIT
     font-weight: bold;
     src: url("URWClassicSans-Bold.woff2");
 }
+
 @font-face {
     font-family: "URW Classic Sans";
     font-style: italic;
     font-weight: bold;
     src: url("URWClassicSans-BoldItalic.woff2");
 }
+
 @font-face {
     font-family: "URW Classic Sans";
     font-style: normal;
     font-weight: normal;
     src: url("URWClassicSans-Regular.woff2");
 }
+
 @font-face {
     font-family: "URW Classic Sans";
     font-style: italic;
@@ -98,7 +107,8 @@ SPDX-License-Identifier: MIT
     src: url("URWClassicSans-RegularIt.woff2");
 }
 
-/* From SRFI 276 by Peter McGoron */
+/* Dark/light theme and feature/category by procedure/library are
+   from SRFI 276 by Peter McGoron */
 @media (prefers-color-scheme: light) {
     :root {
         --background-color: white;
@@ -106,9 +116,11 @@ SPDX-License-Identifier: MIT
         --text-color: black;
         --visited-link-color: purple;
     }
+
     code {
         background-color: #f0f0f0;
     }
+
     pre {
         border: 1px solid;
         padding: 7.5px;
@@ -120,13 +132,15 @@ SPDX-License-Identifier: MIT
 @media (prefers-color-scheme: dark) {
     :root {
         --background-color: #161616;
-        --link-color: SkyBlue;
+        --link-color: skyblue;
         --text-color: #e0e0e0;
-        --visited-link-color: Orchid;
+        --visited-link-color: orchid;
     }
+
     code {
         background-color: #2b2b2b;
     }
+
     pre {
         border: 1px solid;
         padding: 7.5px;
@@ -134,21 +148,21 @@ SPDX-License-Identifier: MIT
         margin-bottom: 1.5em;
     }
 }
+
 .feature {
     overflow: auto;
     margin-top: 1.5em;
 }
+
 .category {
     float: right;
     font-family: 'URW Classic Sans', sans-serif;
-    & code {
-        background-color: var(--background-color);
-    }
 }
 
 a {
     color: var(--link-color);
 }
+
 a:visited {
     color: var(--visited-link-color);
 }
@@ -172,6 +186,10 @@ h4 {
 code, tt, pre {
     font-family: 'Roboto Mono', monospace;
     font-size: 85%;
+
+    .category & {
+        background-color: var(--background-color);
+    }
 }
 
 p var, li var {
@@ -190,15 +208,17 @@ dl.procs {
         margin-top: 1em;
         margin-bottom: 0.5em;
     }
+
     & dd {
         margin-top: 0;
     }
+
+    & dd.fake-group {
+        margin-top: 0.5em;
+    }
+
     & dd code + code {
         margin-left: 1em;
-    }
-    & br {
-        display: block;
-        margin-top: 0.5em;
     }
 }
 
@@ -209,6 +229,7 @@ table {
     border: 1px solid;
     margin-bottom: 1em;
 }
+
 table.args td {
     padding-left: 0.5em;
     padding-right: 0.5em;
@@ -219,46 +240,56 @@ dl.test-cases {
     font-weight: normal;
     font-style: normal;
     margin-left: 2em;
+
     & dt {
         font-weight: normal;
         margin-top: 0.75em;
     }
+
     & dd {
         margin-left: 1.5em;
         margin-bottom: 0;
         overflow-x: auto;
+
         & .remark {
             display: block;
             margin-top: 0.2em;
         }
+
         & .components {
             display: block;
             margin-top: 0.2em;
         }
     }
 }
+
 .overflow-x {
     overflow-x: auto;
 }
+
 table.parsing-segments {
     margin-left: 2em;
     border-collapse: separate;
     border-spacing: 0;
+
     & th, td {
         padding: 0.2em 0.4em;
         text-align: left;
     }
+
     & th {
         position: sticky;
         top: 0;
         background: var(--background-color);
         z-index: 1;
     }
+
     & tr.case-label {
         & td {
             padding-top: 0.5em;
             font-weight: normal;
         }
+
         & div {
             position: sticky;
             left: 0;
@@ -267,20 +298,25 @@ table.parsing-segments {
         }
     }
 }
+
 ul#references {
     list-style-type: none;
     margin-left: -2em;
+
     & li {
         margin-bottom: 0.5em;
+
         & a {
             font-family: "URW Classic Sans", sans-serif;
             font-weight: bold;
+
             & code {
                 font-weight: normal;
             }
         }
     }
 }
+
 .nonbody, ul#toc-listing, ol#turtle-cases {
     font-family: 'URW Classic Sans', sans-serif;
     font-weight: normal;
