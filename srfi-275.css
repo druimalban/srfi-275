@@ -317,7 +317,7 @@ ul#references {
     }
 }
 
-.nonbody, ul#toc-listing, ol#turtle-cases {
+.nonbody, #toc + ul, ol#turtle-cases {
     font-family: 'URW Classic Sans', sans-serif;
     font-weight: normal;
     font-style: normal;
