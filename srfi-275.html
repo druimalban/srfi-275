@@ -947,7 +947,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#normalize-iri-case" id="normalize-iri-case">normalize-iri-case</a> <var>iri</var>)</code><br>
   <code class="signature">(<a href="#normalize-uri-case" id="normalize-uri-case">normalize-uri-case</a> <var>uri</var>)</code><br>
 </div>
-<p>Normalize case-insensitive components (scheme and host), and convert percent-encoded bytes to canonical upper-case. Examples (see <a href="#test-uri-case-normalization">case normalization test cases</a>):</p>
+<p>Normalize case-insensitive components (scheme and host), and convert percent-encoded bytes to canonical upper-case. Examples (see <a href="#test-case-normalization">case normalization test cases</a>):</p>
 <pre>
 (normalize-iri-case (string->iri "HttP://example.org/ex#test")) &rarr; &lt;http://example.org/ex#test&gt;
 (normalize-iri-case (string->iri "http://Example.ORG/ex#test")) &rarr; &lt;http://example.org/ex#test&gt;
@@ -1738,7 +1738,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
     &rarr; <code>&lt;http://myname@example.org/misc.txt#line10&gt;</code></dd>
 </dl>
 
-<p>The following test cases <i>only</i> apply to URIs:</p>
+<p id="test-uri-escape-normalization">The following test cases <i>only</i> apply to URIs:</p>
 
 <dl class="test-cases">
   <dt>URI user illegal characters are escaped</dt>
@@ -1758,7 +1758,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
     &rarr; <code>&lt;http://crepes.example.org/in/Rennes#L'%C3%89tage&gt;</code></dd>
 </dl>
 
-<p>The following test cases <i>only</i> apply to IRIs:</p>
+<p id="test-iri-escape-normalization">The following test cases <i>only</i> apply to IRIs:</p>
 
 <dl class="test-cases">
   <dt>IRI user permissible escape decoded</dt>
