@@ -322,3 +322,6 @@ ul#references {
     font-weight: normal;
     font-style: normal;
 }
+ol#turtle-cases {
+    list-style-type: none;
+}
