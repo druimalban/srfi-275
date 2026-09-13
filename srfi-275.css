@@ -12,25 +12,24 @@ SPDX-License-Identifier: MIT
    The source package was 2026.20260711-2, as retrieved 30 August 2026.
 */
 @font-face {
-    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: normal;
     font-weight: bold;
-    src: local("Charter"),
-         local("Bitstream Charter"),
+    src: local("Charter-Bold"),
+         local("Bitstream Charter-Bold"),
          url("XCharter-Bold.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: italic;
     font-weight: bold;
-    src: local("Charter"),
-         local("Bitstream Charter"),
+    src: local("Charter-BoldItalic"),
+         local("Bitstream Charter-BoldItalic"),
          url("XCharter-BoldItalic.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: normal;
     font-weight: normal;
@@ -38,34 +37,35 @@ SPDX-License-Identifier: MIT
          local("Bitstream Charter"),
          url("XCharter-Roman.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "Bitstream Charter";
     font-style: italic;
     font-weight: normal;
-    src: local("Charter"),
-         local("Bitstream Charter"),
+    src: local("Charter-Italic"),
+         local("Bitstream Charter-Italic"),
          url("XCharter-Italic.woff2");
 }
+
 /*
    Roboto Mono is licensed under the SIL Open Font License, Version 1.1.
 
    These fonts were retrieved from the Google Fonts site 30 August 2026.
 */
 @font-face {
-    font-display: optional;
     font-family: "Roboto Mono";
     font-style: normal;
     font-weight: normal;
     src: url("RobotoMono-Regular.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "Roboto Mono";
     font-style: italic;
     font-weight: normal;
     src: url("RobotoMono-Italic.woff2");
 }
+
 /*
    From the r7rs.org CSS:
 
@@ -80,34 +80,35 @@ SPDX-License-Identifier: MIT
    These fonts are base64 encoded from GhostPDL 10.07.1, as retrieved 30 August 2026.
 */
 @font-face {
-    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: normal;
     font-weight: bold;
     src: url("URWClassicSans-Bold.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: italic;
     font-weight: bold;
     src: url("URWClassicSans-BoldItalic.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: normal;
     font-weight: normal;
     src: url("URWClassicSans-Regular.woff2");
 }
+
 @font-face {
-    font-display: optional;
     font-family: "URW Classic Sans";
     font-style: italic;
     font-weight: normal;
     src: url("URWClassicSans-RegularIt.woff2");
 }
 
+/* Dark/light theme and feature/category by procedure/library are
+   from SRFI 276 by Peter McGoron */
 @media (prefers-color-scheme: light) {
     :root {
         --background-color: white;
@@ -115,106 +116,55 @@ SPDX-License-Identifier: MIT
         --text-color: black;
         --visited-link-color: purple;
     }
+
     code {
         background-color: #f0f0f0;
     }
+
     pre {
         border: 1px solid;
         padding: 7.5px;
         background-color: #f0f0f0;
-        margin-bottom: 18pt;
+        margin-bottom: 1.5em;
     }
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background-color: #161616;
-        --link-color: SkyBlue;
+        --link-color: skyblue;
         --text-color: #e0e0e0;
-        --visited-link-color: Orchid;
+        --visited-link-color: orchid;
     }
+
     code {
         background-color: #2b2b2b;
     }
+
     pre {
         border: 1px solid;
         padding: 7.5px;
         background-color: #2b2b2b;
-        margin-bottom: 18pt;
+        margin-bottom: 1.5em;
     }
 }
 
-.never-break-inside > a {
-    white-space: nowrap;
-}
-.never-break-inside > code {
-    white-space: nowrap;
-}
-.no-bg {
-    background-color: var(--background-color);
-}
-
 .feature {
-    overflow: hidden;
-    margin-top: 18pt;
+    overflow: auto;
+    margin-top: 1.5em;
 }
 
 .category {
     float: right;
     font-family: 'URW Classic Sans', sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 12pt;
-}
-.category code {
-    background-color: var(--background-color);
-}
-
-
-.boxed {
-    border: 1px solid;
-    padding-top: 6pt;
-    padding-bottom: 6pt;
-    padding-left: 6pt;
-    padding-right: 12pt;
-    overflow: auto;
-    margin-bottom: 6pt;
-}
-
-.boxed-tag {
-    font-style: italic;
-}
-
-.example-code {
-    background-color: var(--background-color);
-    display: inline-block;
-    min-width: 46ch;
 }
 
 a {
     color: var(--link-color);
 }
+
 a:visited {
     color: var(--visited-link-color);
-}
-
-dl.procs dt {
-    font-family: 'URW Classic Sans', sans-serif;
-    font-weight: bold;
-    font-size: 15pt;
-}
-dl.procs dd + dt {
-    margin-top: 18px;
-}
-dl.procs dd + dd {
-    margin-top: 6pt;
-}
-dl.procs dd {
-    margin-left: 0;
-    white-space: nowrap;
-}
-dl.procs dd code + code {
-    margin-left: 1em;
 }
 
 body {
@@ -222,11 +172,11 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
 }
+
 h1, h2, h3 {
     font-family: 'URW Classic Sans', sans-serif;
-    font-weight: bold;
-    font-style: normal;
 }
+
 h4 {
     font-family: 'URW Classic Sans', sans-serif;
     font-weight: bold;
@@ -236,24 +186,40 @@ h4 {
 code, tt, pre {
     font-family: 'Roboto Mono', monospace;
     font-size: 85%;
+
+    .category & {
+        background-color: var(--background-color);
+    }
 }
 
-/* Only adjust size of var body text paragraphs */
-p var {
+p var, li var {
     font-family: 'Roboto Mono', monospace;
     font-size: 85%;
     font-style: italic;
-    white-space: nowrap;
-}
-p code {
-    white-space: nowrap;
 }
 
-li code {
-    white-space: nowrap;
-}
-li a code {
-    font-weight: normal;
+/* Format the index of procedures so that the groupings are consistent with
+   non-body text in the sense of font and spacing above and below.
+
+   Set a 1em space between the actual procedures. */
+dl.procs {
+    & dt {
+        font-family: 'URW Classic Sans', sans-serif;
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+    }
+
+    & dd {
+        margin-top: 0;
+    }
+
+    & dd.fake-group {
+        margin-top: 0.5em;
+    }
+
+    & dd code + code {
+        margin-left: 1em;
+    }
 }
 
 table {
@@ -261,114 +227,101 @@ table {
     font-weight: normal;
     font-style: normal;
     border: 1px solid;
-    margin-bottom: 12pt;
+    margin-bottom: 1em;
 }
+
 table.args td {
-    padding-left: 7.5px;
-    padding-right: 7.5px;
-}
-
-.report-name {
-    font-style: italic;
-}
-
-.centered {
-    text-align: center;
-}
-
-.evals-text {
-    font-family: 'Bitstream Charter', serif;
-    font-style: italic;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 dl.test-cases {
-    margin-left: 2em;
-}
-dl.test-cases dt {
+    font-family: 'URW Classic Sans', sans-serif;
     font-weight: normal;
-    margin-top: 0.75em;
+    font-style: normal;
+    margin-left: 2em;
+
+    & dt {
+        font-weight: normal;
+        margin-top: 0.75em;
+    }
+
+    & dd {
+        margin-left: 1.5em;
+        margin-bottom: 0;
+        overflow-x: auto;
+
+        & .remark {
+            display: block;
+            margin-top: 0.2em;
+        }
+
+        & .components {
+            display: block;
+            margin-top: 0.2em;
+        }
+    }
 }
-dl.test-cases dd {
-    margin-left: 1.5em;
-    margin-bottom: 0;
-    overflow-x: auto;
-}
-dl.test-cases dd .remark {
-    display: block;
-    font-style: italic;
-    margin-top: 0.2em;
-}
-dl.test-cases dd .components {
-    display: block;
-    margin-top: 0.2em;
-}
+
 .overflow-x {
     overflow-x: auto;
 }
+
 table.parsing-segments {
     margin-left: 2em;
     border-collapse: separate;
     border-spacing: 0;
-}
-table.parsing-segments th, table.parsing-segments td {
-    padding: 0.2em 0.4em;
-    text-align: left;
-}
-table.parsing-segments th {
-    position: sticky;
-    top: 0;
-    background: var(--background-color);
-    z-index: 1;
-}
-table.parsing-segments tr.case-label td {
-    padding-top: 0.5em;
-    font-weight: normal;
-}
-table.parsing-segments tr.case-label div {
-    position: sticky;
-    left: 0;
-    width: max-content;
-    background: var(--background-color);
-}
-ol#references {
-    counter-reset: item;
-    margin-left: 0;
-    padding-left: 0;
-}
-ol#references li {
-    display: block;
-    margin-bottom: .5em;
-    margin-left: 2em;
-}
-ol#references li a {
-    font-family: "URW Classic Sans", sans-serif;
-    font-weight: bold;
-}
-ol#references li a code {
-    font-weight: normal;
+
+    & th, td {
+        padding: 0.2em 0.4em;
+        text-align: left;
+    }
+
+    & th {
+        position: sticky;
+        top: 0;
+        background: var(--background-color);
+        z-index: 1;
+    }
+
+    & tr.case-label {
+        & td {
+            padding-top: 0.5em;
+            font-weight: normal;
+        }
+
+        & div {
+            position: sticky;
+            left: 0;
+            width: max-content;
+            background: var(--background-color);
+        }
+    }
 }
 
-/* Make the counter the list element, so that entry contents are indented
-   uniformly regardless of size of the number in brackets. */
-ol#references li::before {
-    display: inline-block;
-    content: "[" counter(item) "]";
-    counter-increment: item;
-    width: 2.5em;
+ul#references {
+    list-style-type: none;
     margin-left: -2em;
+
+    & li {
+        margin-bottom: 0.5em;
+
+        & a {
+            font-family: "URW Classic Sans", sans-serif;
+            font-weight: bold;
+
+            & code {
+                font-weight: normal;
+            }
+        }
+    }
 }
 
-/* Shift arrow below so it isn't overlayed on the bracketed number.
-   This works as the refenence link is now on a newline, after the authors,
-    so the arrow shows up immediately below the reference index. */
-ol#references li :target::before {
-  top: +24pt;
-}
-ol#turtle-cases {
-    font-family: 'URW Classic Sans', sans-serif;
-}
-.test-cases, .hlike, ul#toc {
+.nonbody, ul#toc-listing, ol#turtle-cases {
     font-family: 'URW Classic Sans', sans-serif;
     font-weight: normal;
     font-style: normal;
+}
+ol#turtle-cases {
+    list-style-type: none;
 }
