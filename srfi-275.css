@@ -126,6 +126,7 @@ SPDX-License-Identifier: MIT
         padding: 7.5px;
         background-color: #f0f0f0;
         margin-bottom: 1.5em;
+        overflow-x: auto;
     }
 }
 
@@ -146,6 +147,7 @@ SPDX-License-Identifier: MIT
         padding: 7.5px;
         background-color: #2b2b2b;
         margin-bottom: 1.5em;
+        overflow-x: auto;
     }
 }
 
