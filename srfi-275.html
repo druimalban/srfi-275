@@ -123,7 +123,7 @@ SPDX-License-Identifier: MIT
 
 <h2 id="structured-presentation">A structured presentation</h2>
 
-<p>URIs and IRIs are structured data. Of course, record types are convenient as they generate dedicated getters and setters. More importantly, however, we think that record structures are necessary in this case for normalization procedures to be structure-preserving. Specifically, normalization procedures may alter the path, such that its segments may be mistaken for other parts of the URI or IRI, such as the <code>&lt;://&gt;</code> portion separating scheme from authority, or for the hostname. Updates to authority components or to the path need to similarly ensure that they produce valid URIs and IRIs when serialized (see <a href="#error-behaviour-of-setters">below</a>).</p>
+<p>URIs and IRIs are structured data. Of course, record types are convenient as they generate dedicated getters and setters. More importantly, however, we think that record structures are necessary in this case for normalization procedures to be structure-preserving. Specifically, normalization procedures may alter the path, such that its segments may be mistaken for other parts of the URI or IRI, especially the <code>://</code> portion separating scheme from authority. Updates to authority components or to the path need to similarly ensure that they produce valid URIs and IRIs when serialized (see <a href="#error-behaviour-of-setters">below</a>).</p>
 
 <p>We argue that a string representation makes it too easy to inadvertently modify the structure, because normalization of individual components may yield a string which, when parsed again, is interpreted differently with respect to the structure. A good example of this is the restrictions on paths given an authority, because a non-empty authority is denoted in an URI using two slashes, which are characters which may also appear in paths.</p>
 
@@ -168,7 +168,7 @@ SPDX-License-Identifier: MIT
 
 <h3 id="case-normalization">Case normalization</h3>
 
-<p>The scheme and host components of both URIs and IRIs are considered case-insensitive, with other components considered case-sensitive. For URIs, the repertoire of characters is within U.S. ASCII., whereas for IRIs, Unicode characters may appear. Nonetheless, for both URIs and IRIs, only U.S. ASCII is case-insensitive, with characters like &ldquo;É&rdquo; never being normalized to a lower-case form like &ldquo;é&rdquo;.</p>
+<p>The scheme and host components of both URIs and IRIs are considered case-insensitive, with other components considered case-sensitive. For URIs, the repertoire of characters is within U.S. ASCII, whereas for IRIs, Unicode characters may appear. Nonetheless, for both URIs and IRIs, only ASCII is case-insensitive, with characters like &ldquo;É&rdquo; never normalized to a lower-case form like &ldquo;é&rdquo;.</p>
 
 <p>Escapes take the form of percent-encoded bytes, appearing as <code>%</code> <code>0-F</code> <code>0-F</code> (hexadecimal digits) in URIs and IRIs. These hexadecimal digits have a canonical upper-case form. For example, <code>%cf</code> should be normalized to <code>%CF</code>. In practice, the sample implementation always parses these into a canonical form as it represents these internally as octets, not in the original string form. If implementations do preserve the original form, they must always support normalization into the canonical upper-case form.</p>
 
@@ -184,7 +184,7 @@ SPDX-License-Identifier: MIT
 
 <p>Path segment normalization is structurally identical for both URIs and IRIs. It interprets an entire path with respect to two control sequences: &lsquo;<code>.</code>&rsquo; (current working directory) and &lsquo;<code>..</code>&rsquo; (parent working directory), similar to UNIX paths. Unlike the other two normalization procedures, path segment normalization is <b>undefined for relative references</b>, because the path portion is not meaningful except during relative reference resolution.</p>
 
-<p>It should be noted that path segment normalization <i>is</i> defined for non-relative IRIs with relative paths, such as <code>&lt;foo:a/b/../.././../../e&gt;</code>. This is a major source of diversion between RFC 3986 implementations. This appears to arise from reusing the <a href="https://www.rfc-editor.org/info/rfc3986/#section-5.2.4">Remove Dot Segments</a> procedure as defined in RFC 3986 verbatim. In relative reference resolution, this procedure is <i>never</i> called on relative paths, only on absolute paths.</p>
+<p>It should be noted that path segment normalization <i>is</i> defined for non-relative IRIs with relative paths, such as <code>&lt;foo:a/b/../.././../../e&gt;</code>. This is a major source of diversion between RFC 3986 implementations. This appears to arise from reusing the <a href="https://www.rfc-editor.org/info/rfc3986/#section-5.2.4">Remove Dot Segments</a> procedure as defined in RFC 3986 verbatim.</p>
 
 <p>For example, for the (non-relative) URI <code>&lt;foo:a/b/../.././../../e&gt;</code>, implementations using the RFC 3986 procedure verbatim get <code>&lt;foo:/e&gt;</code>, whereas other implementations get <code>&lt;foo:e&gt;</code>. In the former camp are implementations like the Erlang/OTP system&rsquo;s built-in <code>uri_string</code> <a href="#erlang-uri-string">[9]</a>, and Guile-RDF <a href="#guile-rdf">[10]</a>, whereas in the latter camp are implementations like Haskell&rsquo;s <code>network-uri</code> <a href="#hs-network-uri">[6]</a> and Chicken&rsquo;s <code>uri-generic</code> / <code>uri-common</code> libraries <a href="#chicken-uri-generic">[7]</a><a href="#chicken-uri-common">[8]</a>. We are in the latter camp, and a fixed Remove Dot Segments procedure might be implemented as follows. The sample implementation internally represents raw segments as a list of SRFI 160 <a href="#srfi-160">[15]</a> <code>u16vector</code> segments (percent-encoded bytes shifted by 256, unescaped UTF-8 octets represented verbatim), and uses the SRFI 262 pattern matcher <a href="#srfi-262">[16]</a>.</p>
 <pre>
@@ -228,7 +228,7 @@ SPDX-License-Identifier: MIT
 
 <p>Relative reference resolution resolves an URI or IRI against a (non-relative) base URI or IRI. This SRFI proposal simply names these procedures <a href="#resolve-uri"><code>resolve-uri</code></a> and <a href="#resolve-iri"><code>resolve-iri</code></a> as the &ldquo;relative reference resolution&rdquo; language in RFC 3986 and 3987 specifically refers to <a href="https://www.rfc-editor.org/info/rfc3986/#section-4.1">&ldquo;URI-reference&rdquo;</a> and <a href="https://www.rfc-editor.org/info/rfc3987/#section-2.2">&ldquo;IRI-reference&rdquo;</a> (see <a href="#polymorphic-procedures">above</a>). Additionally, this naming is consistent with existing libraries such as Erlang&rsquo;s <code>uri_string</code> module <a href="#erlang-uri-string">[9]</a> and Java&rsquo;s URI module <a href="#java-se25-uri">[11]</a>.</p>
 
-<p>The inverse of these procedures take a non-relative URI or IRI and a base URI or IRI, and materialize a relative reference which, given the base, would produce that non-relative URI or IRI. This relativization is not specified in RFC 3986 or 3987, but is fairly widespread, such as <code>relative-from</code> found in Haskell&rsquo;s <code>network-uri</code> <a href="#hs-network-uri">[6]</a> and Chicken&rsquo;s <code>uri-generic</code> <a href="#chicken-uri-generic">[7]</a>, and <code>relativize</code> found in Java&rsquo;s URI module <a href="#java-se25-uri">[11]</a>. Java&rsquo;s class methods for both resolution and relativization belong to a base URI, whereas the Haskell and Chicken libraries flip relativization's arguments for consistency with the &lsquo;from&rsquo; direction. This SRFI proposal names these procedures  <a href="#relativize-uri"><code>relativize-uri</code></a> and <a href="#relativize-iri"><code>relativize-iri</code></a>, following Java&rsquo;s naming and argument convention, although the behaviour and test cases are based on the Chicken library.</p>
+<p>The inverse of these procedures take a non-relative URI or IRI and a base URI or IRI, and materialize a relative reference which, given the base, would produce that non-relative URI or IRI. This relativization is not specified in RFC 3986 or 3987, but is fairly widespread, such as <code>relative-from</code> found in Haskell&rsquo;s <code>network-uri</code> <a href="#hs-network-uri">[6]</a> and Chicken&rsquo;s <code>uri-generic</code> <a href="#chicken-uri-generic">[7]</a>, and <code>relativize</code> found in Java&rsquo;s URI module <a href="#java-se25-uri">[11]</a>. Java&rsquo;s class methods for both resolution and relativization belong to a base URI, whereas the Haskell and Chicken libraries flip relativization&rsquo;s arguments for consistency with the &lsquo;from&rsquo; direction. This SRFI proposal names these procedures  <a href="#relativize-uri"><code>relativize-uri</code></a> and <a href="#relativize-iri"><code>relativize-iri</code></a>, following Java&rsquo;s naming and argument convention, although the behaviour and test cases are based on the Chicken library.</p>
 
 <p>Relativization proceeds as follows, given base and non-base URI (or IRI) arguments:</p>
 <ol>
@@ -295,9 +295,9 @@ SPDX-License-Identifier: MIT
      (encode-string str (char-set-complement char-set:iri-unreserved)))
     ((str cset)
      (cond ((not (string? str))
-            (assertion-violation 'encode-string "not a string" nonstr))
+            (assertion-violation 'encode-string "not a string" str))
            ((not (char-set? escape-these))
-            (assertion-violation 'encode-string "not a character set" noncset))
+            (assertion-violation 'encode-string "not a character set" escape-these))
            (else
             ...)))))
 </pre>
@@ -309,9 +309,9 @@ SPDX-License-Identifier: MIT
      (encode-string str (char-set-complement char-set:iri-unreserved)))
     ((str cset)
      (cond ((not (string? str))
-            (error "not a string" nonstr))
+            (error "not a string" str))
            ((not (char-set? escape-these))
-            (error "not a character set" noncset))
+            (error "not a character set" escape-these))
            (else
             ...)))))
 </pre>
@@ -336,7 +336,7 @@ SPDX-License-Identifier: MIT
 
 <p>Although we support both IRIs and URIs, for brevity we primarily describe behaviour for IRIs, and omit descriptions of the equivalent procedures for URIs where they behave the same. This works because URIs and IRIs are structurally identical, with the divergence between RFC 3986 and 3987 arising from the generalization of the character set, and the treatment of normalization.</p>
 
-<p>Library references are in the form <code>(srfi :275 <span class="type-sig">⟨sub-library⟩</span>)</code>. Five libraries are required to be exported by implementations.</p>
+<p>Library references are in the form <code>(srfi :275 <span class="type-sig">⟨sub-library⟩</span>)</code>. Five libraries are required to be exported by implementations:</p>
 <ul>
   <li><code>(srfi :275 iri)</code>: RFC 3987 IRIs, setters and getters, character sets</li>
   <li><code>(srfi :275 uri)</code>: RFC 3986 URIs, setters and getters, character sets</li>
@@ -680,7 +680,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#update-iri-scheme" id="update-iri-scheme">update-iri-scheme</a> <var>non-relative-iri</var> <var>string</var>)</code><br>
 </div>
 
-<p>Persistent setter for the scheme component of <var>non-relative-iri</var>, encoding the string <var>string</var>. During parsing, an error is raised if a character cannot be contained within a scheme at that position, with the character, its position in the IRI, and the IRI as irritants. Unlike the other setters for IRI components to follow, setting the scheme to <code>#f</code> or the empty string is not possible becasue it would imply that the IRI is a relative reference.</p>
+<p>Persistent setter for the scheme component of <var>non-relative-iri</var>, encoding the string <var>string</var>. During parsing, an error is raised if a character cannot be contained within a scheme at that position, with the character, its position in the IRI, and the IRI as irritants. Unlike the other setters for IRI components to follow, setting the scheme to <code>#f</code> or the empty string is not possible because it would imply that the IRI is a relative reference.</p>
 <p>Examples:</p>
 <pre>
 (define example0 (string->iri "http://example.org:80/ex#IRI"))
@@ -701,7 +701,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 </div>
 
 <p>Persistent setters to set a respective authority components of <var>iri</var> to <var>obj</var>. These procedures check that the authority component after being set to <var>obj</var> is not in conflict with the shape of the existing path. For instance, relative paths cannot usually be set when either of the authority components are set. The <a href="#error-behaviour-of-setters">conditions associated with setting any authority component</a> with the two input arguments are tested, and if they do not hold, then an error is raised with the input arguments as irritants.</p>
-<p>In <code>update-iri-user</code> and <code>update-iri-host</code>, if <var>obj</var> is not <code>#f</code> and is a string, then it will be parsed for the respective component. Any character which cannot be contained within the component will be encoded as a sequence of percent-encoded bytes. When a percent-encoded byte is part of an invalid sequence of UTF-8 octets, <a href="#utf-8-interpretation">an error is raised</a>. In <code>update-iri-port</code>, if <var>obj</var> is not <code>#f</code> and is a non-negative integer, then it will be set-as is, otherwise <code>#f</code>. An assertion violation is raised with <code>obj</code> as irritant if it is not of the expected type just discussed or <code>#f</code>.</p>
+<p>In <code>update-iri-user</code> and <code>update-iri-host</code>, if <var>obj</var> is not <code>#f</code> and is a string, then it will be parsed for the respective component. Any character which cannot be contained within the component will be encoded as a sequence of percent-encoded bytes. When a percent-encoded byte is part of an invalid sequence of UTF-8 octets, <a href="#utf-8-interpretation">an error is raised</a>. In <code>update-iri-port</code>, if <var>obj</var> is not <code>#f</code> and is a non-negative integer, then it will be set-as is, otherwise <code>#f</code>. An assertion violation is raised with <var>obj</var> as irritant if it is not of the expected type just discussed or <code>#f</code>.</p>
 
 <p>Examples:</p>
 <pre>
@@ -726,7 +726,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <span class="category"><code>(srfi :275 iri)</code><br>procedure</span>
   <code class="signature">(<a href="#update-iri-authority" id="update-iri-authority">update-iri-authority</a> <var>iri</var> <var>u</var> <var>h</var> <var>p</var>)</code><br>
 </div>
-<p>Combination procedure which subsumes the above procedures, setting the user component to <var>u</var>, the host component to <var>h</var> and the port component to <var>p</var>. User <var>u</var> and host <var>h</var> must be <code>#f</code> or string, and port <var>p</var> must be <code>#f</code> or a non-negative integer. Error behaviour is identical to the component-specific setters except that the check for conflict with the existing path is that setting all three to  would not be in conflict with the path shape.</p>
+<p>Combination procedure which subsumes the above procedures, setting the user component to <var>u</var>, the host component to <var>h</var> and the port component to <var>p</var>. User <var>u</var> and host <var>h</var> must be <code>#f</code> or string, and port <var>p</var> must be <code>#f</code> or a non-negative integer. Error behaviour is identical to the component-specific setters except that the check for conflict with the existing path is that setting all three would not be in conflict with the path shape.</p>
 
 <div class="feature">
   <span class="category"><code>(srfi :275 iri)</code><br>procedure</span>
@@ -818,7 +818,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#update-uri-path" id="update-uri-path">update-uri-path</a> <var>uri</var> <var>path</var>)</code><br>
   <code class="signature">(<a href="#update-uri-query" id="update-uri-query">update-uri-query</a> <var>uri</var> <var>obj</var>)</code><br>
   <code class="signature">(<a href="#update-uri-fragment" id="update-uri-fragment">update-uri-fragment</a> <var>uri</var> <var>obj</var>)</code><br>
-  <code class="signature">(<a href="#update-uri-authority" id="update-uri-authority">update-uri-authority</a> <var>uri</var> <var>#f</var>)</code><br>
+  <code class="signature">(<a href="#update-uri-authority" id="update-uri-authority">update-uri-authority</a> <var>u</var> <var>h</var> <var>p</var>)</code><br>
   <code class="signature">(<a href="#uri=?" id="uri=?">uri=?</a> <var>uri1</var> <var>uri2</var> <var>uri3</var> &hellip;)</code><br>
 </div>
 
@@ -831,7 +831,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#resolve-iri" id="resolve-iri">resolve-iri</a> <var>base</var> <var>iri</var>)</code><br>
 </div>
 
-<p>Relative reference resolution of <var>iri</var> against <var>base</var>. An assertion violation is raised with irritant <var>base</var> if it is not a <i>non-relative</i> IRI. Simple examples derived from the RDF/Turtle test cases (see <a href="#test-resolution">test suite section</a>):</p>
+<p>Relative reference resolution of <var>iri</var> against <var>base</var>. An assertion violation is raised with irritant <var>base</var> if it is not a <i>non-relative</i> IRI. Simple examples taken from the RDF/Turtle test cases (see <a href="#test-resolution">test suite section</a>):</p>
 <pre>
 (define string-cases '("g:h" "g" "./g" "g/" "/g" "//g"))
 
@@ -885,7 +885,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#relativize-uri" id="relativize-uri">relativize-uri</a> <var>base</var> <var>non-relative-uri</var>)</code><br>
 </div>
 
-<p>Relative reference resolution of an IRI against a base URI, and the inverse, which produces a relative reference given a base IRI and a resolved IRI. Behaviour is structurally identical to that of relative reference resolution for IRIs, and the arguments are instead restricted to non-relative URIs and relative references respectively.</p>
+<p>Relative reference resolution of an IRI against a base URI, and the inverse, which produces a relative reference given a base IRI and a resolved IRI. Behaviour is structurally identical to that for IRIs, and the arguments are instead restricted to non-relative URIs and relative references respectively.</p>
 
 <h3 id="normalization-2">Normalization</h3>
 
@@ -906,7 +906,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <span class="category"><code>(srfi :275 normalize)</code><br>procedure</span>
   <code class="signature">(<a href="#normalize-iri-escape" id="normalize-iri-escape">normalize-iri-escape</a> <var>iri</var>)</code><br>
 </div>
-<p>Normalize an IRI&rsquo;s escapes, potentially interpreting percent-encoded bytes if part of valid UTF-8 octet sequences as characters. Conversely, characters which are not permissible within an URI component will appear as series of percent-encoded bytes corresponding to UTF-8 octets. This procedure is idempotent: a fully normalized IRI will be normalized to itself, and <code>iri=?</code> will hold true between the two.</p>
+<p>Normalize an IRI&rsquo;s escapes, potentially interpreting percent-encoded bytes if part of valid UTF-8 octet sequences as characters. Conversely, characters which are not permissible within an IRI component will appear as series of percent-encoded bytes corresponding to UTF-8 octets. This procedure is idempotent: a fully normalized IRI will be normalized to itself, and <code>iri=?</code> will hold true between the two.</p>
 <p>Examples (see <a href="#test-iri-escape-normalization">escape normalization test cases</a>):</p>
 <pre>
 (normalize-iri-escape (string->iri "http://crepes.example.org/in/Rennes?Dim.%E2%80%A5Sam."))
@@ -1110,7 +1110,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 
 <h3 id="basic-paths-2">Basic paths</h3>
 
-<p>This section descibes the basic path sub-library, consisting of two path variants with a common internal segment structure, tagged with whether there is a leading slash. In addition to predicates to distinguish these two path types, we describe predicates which exactly follow the RFC 3986 and 3987 definitions, which are prefixed with <code>rfc3987-</code>, because our paths admit the character repertoire of paths described in RFC 3987.  Additionally, the prefixed procedures do not raise an error on non-path objects, instead returning <code>#f</code>, consistent with the generic <code>absolute-path?</code> or <code>relative-path?</code> procedures.</p>
+<p>This section describes the basic path sub-library, consisting of two path variants with a common internal segment structure, tagged with whether there is a leading slash. In addition to predicates to distinguish these two path types, we describe predicates which exactly follow the RFC 3986 and 3987 definitions. These are prefixed with <code>rfc3987-</code>, because our paths admit the character repertoire of paths described in RFC 3987.  Additionally, the prefixed procedures do not raise an error on non-path objects, instead returning <code>#f</code>, consistent with the generic <code>absolute-path?</code> or <code>relative-path?</code> procedures.</p>
 
 <div class="feature">
   <span class="category"><code>(srfi :275 path)</code><br>procedure</span>
@@ -1329,7 +1329,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#list-%3Erelative-path" id="list-%3Erelative-path">list->relative-path</a> <var>pair</var>)</code><br>
   <code class="signature">(<a href="#list-%3Erelative-path-2" id="list-%3Erelative-path-2">list->relative-path</a> <var>pair</var> <var>noscheme?</var>)</code><br>
 </div>
-<p>Convert a list of string segments to a relative path. This procedure behaves similarly to <a href="#string-%3Erelative-path"><code>string->relative-path</code></a> with the exception that that slashes are always escaped, so a slash at the start of the first segment does not raise an error. An error is raised if a segment is not a string, with the segment, its position, and <var>list</var> as irritants, and if the initial segment is empty (serialized as leading slash), then an error is raised with the (string) segment, its position, and <i>pair</i> as irritants. An assertion violation is raised if <var>pair</var> is not a proper list.</p>
+<p>Convert a list of string segments to a relative path. This procedure behaves similarly to <a href="#string-%3Erelative-path"><code>string->relative-path</code></a> with the exception that that slashes are always escaped, so a slash at the start of the first segment does not raise an error. An error is raised if a segment is not a string, with the segment, its position, and <var>pair</var> as irritants, and if the initial segment is empty (serialized as leading slash), then an error is raised with the (string) segment, its position, and <var>pair</var> as irritants. An assertion violation is raised if <var>pair</var> is not a proper list.</p>
 <p>Examples:</p>
 <pre>
 (path-segments (list->relative-path '("some" "where" "place"))) &rarr; ("some" "where" "place")
@@ -1394,7 +1394,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <code class="signature">(<a href="#merge-paths" id="merge-paths">merge-paths</a> <var>base</var> <var>path</var>)</code><br>
   <code class="signature">(<a href="#merge-paths-2" id="merge-paths-2">merge-paths</a> <var>base</var> <var>path</var> <var>base-has-authority?</var>)</code><br>
 </div>
-<p>Merge base path <var>base</var> with <var>path</var>. In RFC 3986 section 5.2.3, if a base URI has an authority component and an empty path, then a leading slash concatenated with the reference's path is used. Otherwise, return a string consisting of the base path up to (and excluding) the last segment, concatenated with the reference path. Presence of an authority component is controlled by whether the optional <var>base-has-authority?</var> argument is non-<code>#f</code>, and is mostly important during relative reference resolution. This defaults to <code>#f</code> as this procedure in isolation assumes no authority component.</p>
+<p>Merge base path <var>base</var> with <var>path</var>. In RFC 3986 section 5.2.3, if a base URI has an authority component and an empty path, then a leading slash concatenated with the reference&rsquo;s path is used. Otherwise, return a string consisting of the base path up to (and excluding) the last segment, concatenated with the reference path. Presence of an authority component is controlled by whether the optional <var>base-has-authority?</var> argument is non-<code>#f</code>, and is mostly important during relative reference resolution. This defaults to <code>#f</code> as this procedure in isolation assumes no authority component.</p>
 <p>Examples (see also <a href="#test-resolution">relative reference resolution test cases</a>):</p>
 <pre>
 (define example1 (merge-paths (string->path "/a/b") (string->path "x")))
@@ -1498,7 +1498,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <span class="category"><code>(srfi :275 path)</code><br>variable</span>
   <code class="signature"><a href="#char-set:path" id="char-set:path">char-set:path</a></code><br>
 </div>
-<p>Union of <code>char-set:uri</code> and <code>char-set:ucschar</code> described above. While this is minimally restritive, it does contain (a few) characters disallowed within IRI segments (like &lsquo;#&rsquo;). However, any illegal characters will be escaped in the path setters for URIs and IRIs.</p>
+<p>Union of <code>char-set:uri</code> and <code>char-set:ucschar</code> described above. While this is minimally restrictive, it does contain (a few) characters disallowed within IRI segments (like &lsquo;#&rsquo;). However, any illegal characters will be escaped in the path setters for URIs and IRIs.</p>
 
 <h2 id="test-suite">Test suite</h2>
 
@@ -1509,40 +1509,40 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <p>The following test cases must succeed for both URIs and IRIs, using <a href="#normalize-uri-case"><code>normalize-uri-case</code></a> and <a href="#normalize-iri-case"><code>normalize-iri-case</code></a> respectively.</p>
 
 <dl class="test-cases">
-  <dt>All lower-case preserved</dt>
+  <dt>All lower-case is preserved</dt>
   <dd><code>&lt;http://example.org/ex#test&gt;</code>
     &rarr; <code>&lt;http://example.org/ex#test&gt;</code></dd>
-  <dt>Mixed-case scheme to lower-case</dt>
+  <dt>Mixed-case scheme becomes lower-case</dt>
   <dd><code>&lt;HttP://example.org/ex#test&gt;</code>
     &rarr; <code>&lt;http://example.org/ex#test&gt;</code></dd>
-  <dt>Mixed-case user preserved</dt>
+  <dt>Mixed-case user is preserved</dt>
   <dd><code>&lt;http://MySelf@example.org/Examp#test&gt;</code>
     &rarr; <code>&lt;http://MySelf@example.org/Examp#test&gt;</code></dd>
-  <dt>Mixed-case host to lower-case</dt>
+  <dt>Mixed-case host becomes lower-case</dt>
   <dd><code>&lt;http://Example.ORG/ex#test&gt;</code>
     &rarr; <code>&lt;http://example.org/ex#test&gt;</code></dd>
-  <dt>Mixed case path preserved</dt>
+  <dt>Mixed-case path is preserved</dt>
   <dd><code>&lt;http://example.org/Examp#test&gt;</code>
     &rarr; <code>&lt;http://example.org/Examp#test&gt;</code></dd>
-  <dt>Mixed case query preserved</dt>
+  <dt>Mixed-case query is preserved</dt>
   <dd><code>&lt;http://example.org/examp?Qua#test&gt;</code>
     &rarr; <code>&lt;http://example.org/examp?Qua#test&gt;</code></dd>
-  <dt>Mixed case fragment preserved</dt>
+  <dt>Mixed-case fragment is preserved</dt>
   <dd><code>&lt;http://example.org/examp#TeSt&gt;</code>
     &rarr; <code>&lt;http://example.org/examp#TeSt&gt;</code></dd>
-  <dt>User percent-encodings to upper-case</dt>
+  <dt>User percent-encodings become upper-case</dt>
   <dd><code>&lt;http://%aA@%AA%AB%AC%AD%AE/some/where/place&gt;</code>
     &rarr; <code>&lt;http://%AA@%AA%AB%AC%AD%AE/some/where/place&gt;</code></dd>
-  <dt>Host percent-encodings to upper-case</dt>
+  <dt>Host percent-encodings become upper-case</dt>
   <dd><code>&lt;http://%aa%Ab%AC%aD%AE/some/where/place&gt;</code>
     &rarr; <code>&lt;http://%AA%AB%AC%AD%AE/some/where/place&gt;</code></dd>
-  <dt>Path percent-encodings to upper-case</dt>
+  <dt>Path percent-encodings become upper-case</dt>
   <dd><code>&lt;http://myname@example.org/%Fa/%FB/%fC&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/%FA/%FB/%FC&gt;</code></dd>
-  <dt>Query percent-encodings to upper-case</dt>
+  <dt>Query percent-encodings become upper-case</dt>
   <dd><code>&lt;http://myname@example.org/%FA/%FB/%FC?%ff&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/%FA/%FB/%FC?%FF&gt;</code></dd>
-  <dt>Fragment percent-encodings to upper-case</dt>
+  <dt>Fragment percent-encodings become upper-case</dt>
   <dd><code>&lt;http://myname@example.org/%FA/%FB/%FC#%ff&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/%FA/%FB/%FC#%FF&gt;</code></dd>
 </dl>
@@ -1560,49 +1560,49 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <p>The following test cases must succeed for both URIs and IRIs, using <a href="#normalize-uri-escape"><code>normalize-uri-escape</code></a> and <a href="#normalize-iri-escape"><code>normalize-iri-escape</code></a> respectively.</p>
 
 <dl class="test-cases">
-  <dt>User reserved character not escaped</dt>
+  <dt>User reserved characters are not escaped</dt>
   <dd><code>&lt;http://my!name@example.org/ex#test&gt;</code>
     &rarr; <code>&lt;http://my!name@example.org/ex#test&gt;</code></dd>
-  <dt>Host reserved character not escaped</dt>
+  <dt>Host reserved characters are not escaped</dt>
   <dd><code>&lt;http://myname@!example.org/ex#test&gt;</code>
     &rarr; <code>&lt;http://myname@!example.org/ex#test&gt;</code></dd>
-  <dt>Path reserved character not escaped</dt>
+  <dt>Path reserved characters are not escaped</dt>
   <dd><code>&lt;http://myname@example.org/ex!#test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/ex!#test&gt;</code></dd>
-  <dt>Query reserved character not escaped</dt>
+  <dt>Query reserved characters are not escaped</dt>
   <dd><code>&lt;http://myname@example.org/ex?!a#test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/ex?!a#test&gt;</code></dd>
-  <dt>Fragment reserved character not escaped</dt>
+  <dt>Fragment reserved characters are not escaped</dt>
   <dd><code>&lt;http://myname@example.org/ex?a#!test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/ex?a#!test&gt;</code></dd>
-  <dt>User reserved escape not decoded</dt>
+  <dt>User reserved escapes are not decoded</dt>
   <dd><code>&lt;http://my%40name@example.org/ex#test&gt;</code>
     &rarr; <code>&lt;http://my%40name@example.org/ex#test&gt;</code></dd>
-  <dt>Host reserved escape not decoded</dt>
+  <dt>Host reserved escapes are not decoded</dt>
   <dd><code>&lt;http://myname@ex%40ample.org/ex#test&gt;</code>
     &rarr; <code>&lt;http://myname@ex%40ample.org/ex#test&gt;</code></dd>
-  <dt>Path reserved escape not decoded</dt>
+  <dt>Path reserved escapes are not decoded</dt>
   <dd><code>&lt;http://myname@example.org/e%40x#test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/e%40x#test&gt;</code></dd>
-  <dt>Query reserved escape not decoded</dt>
+  <dt>Query reserved escapes are not decoded</dt>
   <dd><code>&lt;http://myname@example.org/ex?a%40#test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/ex?a%40#test&gt;</code></dd>
-  <dt>Fragment reserved escape not decoded</dt>
+  <dt>Fragment reserved escapes are not decoded</dt>
   <dd><code>&lt;http://myname@example.org/ex?a#t%40est&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/ex?a#t%40est&gt;</code></dd>
-  <dt>User permissible escape decoded</dt>
+  <dt>User permissible escapes are decoded</dt>
   <dd><code>&lt;http://my%2Ename@example.org/ex?a#test&gt;</code>
     &rarr; <code>&lt;http://my.name@example.org/ex?a#test&gt;</code></dd>
-  <dt>Host permissible escape decoded</dt>
+  <dt>Host permissible escapes are decoded</dt>
   <dd><code>&lt;http://myname@example%2Eorg/ex?a#test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/ex?a#test&gt;</code></dd>
-  <dt>Path permissible escape decoded</dt>
+  <dt>Path permissible escapes are decoded</dt>
   <dd><code>&lt;http://myname@example.org/misc%2Etxt#test&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/misc.txt#test&gt;</code></dd>
-  <dt>Query permissible escape decoded</dt>
+  <dt>Query permissible escapes are decoded</dt>
   <dd><code>&lt;http://myname@example.org/misc.txt?%2E%2E%2E&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/misc.txt?...&gt;</code></dd>
-  <dt>Fragment permissible escape decoded</dt>
+  <dt>Fragment permissible escapes are decoded</dt>
   <dd><code>&lt;http://myname@example.org/misc.txt#line%31%30&gt;</code>
     &rarr; <code>&lt;http://myname@example.org/misc.txt#line10&gt;</code></dd>
 </dl>
@@ -1630,10 +1630,10 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <p id="test-iri-escape-normalization">The following test cases <i>only</i> apply to IRIs:</p>
 
 <dl class="test-cases">
-  <dt>IRI user permissible escape decoded</dt>
+  <dt>IRI user permissible escapes are decoded</dt>
   <dd><code>&lt;http://dosh%C2%A3@crepes.example.org&gt;</code>
     &rarr; <code>&lt;http://dosh£@crepes.example.org&gt;</code></dd>
-  <dt>IRI host permissible escape decoded</dt>
+  <dt>IRI host permissible escapes are decoded</dt>
   <dd><code>&lt;http://cr%C3%AApes.example.org&gt;</code>
     &rarr; <code>&lt;http://crêpes.example.org&gt;</code></dd>
   <dt>IRI path permissible characters are decoded</dt>
@@ -1645,16 +1645,16 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <dt>IRI fragment permissible characters are decoded</dt>
   <dd><code>&lt;http://crepes.example.org/in/Rennes#L'%C3%89tage&gt;</code>
     &rarr; <code>&lt;http://crepes.example.org/in/Rennes#L'Étage&gt;</code></dd>
-  <dt>IRI wholly escaped wholly decoded</dt>
+  <dt>IRI wholly escaped is wholly decoded</dt>
   <dd><code>&lt;https://en.wiktionary.org/wiki/%E1%BF%AC%CF%8C%CE%B4%CE%BF%CF%82&gt;</code>
     &rarr; <code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code></dd>
-  <dt>IRI partially normalized wholly decoded</dt>
+  <dt>IRI partially normalized is wholly decoded</dt>
   <dd><code>&lt;https://example.org/music/%C3%89irigh'sCuirOrtDoChuid%C3%89adaigh&gt;</code>
     &rarr; <code>&lt;https://example.org/music/Éirigh'sCuirOrtDoChuidÉadaigh&gt;</code></dd>
-  <dt>IRI wholly normalized not reencoded</dt>
+  <dt>IRI wholly normalized is not reencoded</dt>
   <dd><code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code>
     &rarr; <code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code></dd>
-  <dt>IRI repeated normalization (idempotence)</dt>
+  <dt>IRI repeated normalization is idempodent</dt>
   <dd><code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code>
     &rarr; <code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code>
     <span class="remark">In this test case, <code>normalize-iri-escape</code> should be called multiple times, i.e. <code>(compose normalize-iri-escape normalize-iri-escape)</code></span></dd>
@@ -1665,102 +1665,86 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <p>The following test cases must succeed for both URIs and IRIs, using <a href="#normalize-uri-path"><code>normalize-uri-path</code></a> and <a href="#normalize-iri-path"><code>normalize-iri-path</code></a> respectively.</p>
 
 <dl class="test-cases">
-  <dt>Absolute path without dotted segments unchanged</dt>
+  <dt>Absolute path without dotted segments is unchanged</dt>
   <dd><code>&lt;http://example.org/some/where/place&gt;</code>
     &rarr; <code>&lt;http://example.org/some/where/place&gt;</code></dd>
-  <dt>No authority absolute path without dotted segments unchanged</dt>
+  <dt>Absolute path with no authority and without dotted segments is unchanged</dt>
   <dd><code>&lt;urn:/some/where/place&gt;</code>
     &rarr; <code>&lt;urn:/some/where/place&gt;</code></dd>
-  <dt>Relative path without dotted segments unchanged</dt>
+  <dt>Relative path without dotted segments is unchanged</dt>
   <dd><code>&lt;urn:some/where/place&gt;</code>
     &rarr; <code>&lt;urn:some/where/place&gt;</code></dd>
-  <dt>Absolute path eliminates single dotted segments</dt>
+  <dt>Absolute path is eliminated of single dotted segments</dt>
   <dd><code>&lt;urn:/some/./where/././place/./&gt;</code>
     &rarr; <code>&lt;urn:/some/where/place/&gt;</code></dd>
-  <dt>Relative path eliminates single dotted segments</dt>
+  <dt>Relative path is eliminated of single dotted segments</dt>
   <dd><code>&lt;urn:some/./where/././place/./&gt;</code>
     &rarr; <code>&lt;urn:some/where/place/&gt;</code></dd>
-  <dt>Absolute path empty segments treated like non-empty</dt>
+  <dt>Absolute path empty segments are treated like non-empty</dt>
   <dd><code>&lt;urn:/some//where//place//&gt;</code>
     &rarr; <code>&lt;urn:/some//where//place//&gt;</code></dd>
-  <dt>Relative path empty segments treated like non-empty</dt>
+  <dt>Relative path empty segments are treated like non-empty</dt>
   <dd><code>&lt;urn:some//where//place//&gt;</code>
     &rarr; <code>&lt;urn:some//where//place//&gt;</code></dd>
-  <dt>Single leading slash not normalized</dt>
+  <dt>Single leading slash is not normalized</dt>
   <dd><code>&lt;/&gt;</code>
     &rarr; <code>&lt;/&gt;</code></dd>
-  <dt>Multiple leading slashes not normalized</dt>
+  <dt>Multiple leading slashes are not normalized</dt>
   <dd><code>&lt;////&gt;</code>
     &rarr; <code>&lt;////&gt;</code>
     <span class="remark">While a single slash in the previous test is a bare path, <code>//</code> is bare authority, rather than an expected absolute path</span></dd>
-  <dt>Absolute path reference not normalized (double-dot)</dt>
+  <dt>Absolute path reference is not normalized (double-dot)</dt>
   <dd><code>&lt;/a/b/../../c&gt;</code>
     &rarr; <code>&lt;/a/b/../../c&gt;</code></dd>
-  <dt>Absolute path reference not normalized (single-dot)</dt>
+  <dt>Absolute path reference is not normalized (single-dot)</dt>
   <dd><code>&lt;/a/b/././c&gt;</code>
     &rarr; <code>&lt;/a/b/././c&gt;</code></dd>
-  <dt>Absolute path reference not normalized (mixed dotted)</dt>
+  <dt>Absolute path reference is not normalized (mixed dotted)</dt>
   <dd><code>&lt;/a/b/../c/././d&gt;</code>
     &rarr; <code>&lt;/a/b/../c/././d&gt;</code></dd>
-  <dt>Relative path reference not normalized (double-dot)</dt>
+  <dt>Relative path reference is not normalized (double-dot)</dt>
   <dd><code>&lt;a/b/../../c&gt;</code>
     &rarr; <code>&lt;a/b/../../c&gt;</code></dd>
-  <dt>Relative path reference not normalized (single-dot)</dt>
+  <dt>Relative path reference is not normalized (single-dot)</dt>
   <dd><code>&lt;a/b/././c&gt;</code>
     &rarr; <code>&lt;a/b/././c&gt;</code></dd>
-  <dt>Relative path reference not normalized (mixed dotted)</dt>
+  <dt>Relative path reference is not normalized (mixed dotted)</dt>
   <dd><code>&lt;a/b/../c/././d&gt;</code>
     &rarr; <code>&lt;a/b/../c/././d&gt;</code></dd>
-  <dt>1-segment path reference with leading dot not normalized</dt>
+  <dt>1-segment path reference with leading dot is not normalized</dt>
   <dd><code>&lt;./def&gt;</code>
     &rarr; <code>&lt;./def&gt;</code></dd>
-  <dt>1-segment path reference with leading dot not normalized (colon)</dt>
+  <dt>1-segment path reference with leading dot is not normalized (colon)</dt>
   <dd><code>&lt;./abc:def&gt;</code>
     &rarr; <code>&lt;./abc:def&gt;</code></dd>
-  <dt>Additional relative path case not normalized</dt>
+  <dt>Additional relative path case is not normalized</dt>
   <dd><code>&lt;../../abc/./def&gt;</code>
     &rarr; <code>&lt;../../abc/./def&gt;</code></dd>
   <dt>Relative path must not be normalized to an absolute path</dt>
   <dd><code>&lt;foo:a/b/../.././../../e&gt;</code>
     &rarr; <code>&lt;foo:e&gt;</code>
     <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>Empty segments eliminated like non-empty (1)</dt>
+  <dt>Empty segments are eliminated like non-empty</dt>
   <dd><code>&lt;http://example.com////../..&gt;</code>
-    &rarr; <code>&lt;http://example.com//&gt;</code>
-    <span class="remark">From Webkit <a href="#webkit">[13]</a></span></dd>
-  <dt>Empty segments eliminated like non-empty (2)</dt>
+    &rarr; <code>&lt;http://example.com//&gt;</code></dd>
   <dd><code>&lt;http://example.com/foo/bar//../..&gt;</code>
-    &rarr; <code>&lt;http://example.com/foo/&gt;</code>
-    <span class="remark">From Webkit <a href="#webkit">[13]</a></span></dd>
-  <dt>Empty segments eliminated like non-empty (3)</dt>
+    &rarr; <code>&lt;http://example.com/foo/&gt;</code>/dd>
   <dd><code>&lt;http://example.com/foo/bar//..&gt;</code>
     &rarr; <code>&lt;http://example.com/foo/bar/&gt;</code>
     <span class="remark">From Webkit <a href="#webkit">[13]</a></span></dd>
-  <dt>General test case #1</dt>
+  <dt>General test cases</dt>
   <dd><code>&lt;http://example/a/b/../../c&gt;</code>
-    &rarr; <code>&lt;http://example/c&gt;</code>
-    <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>General test case #2</dt>
+    &rarr; <code>&lt;http://example/c&gt;</code></dd>
   <dd><code>&lt;http://example/a/b/c/../../&gt;</code>
-    &rarr; <code>&lt;http://example/a/&gt;</code>
-    <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>General test case #3</dt>
+    &rarr; <code>&lt;http://example/a/&gt;</code></dd>
   <dd><code>&lt;http://example/a/b/c/./&gt;</code>
-    &rarr; <code>&lt;http://example/a/b/c/&gt;</code>
-    <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>General test case #4</dt>
+    &rarr; <code>&lt;http://example/a/b/c/&gt;</code></dd>
   <dd><code>&lt;http://example/a/b/c/.././&gt;</code>
-    &rarr; <code>&lt;http://example/a/b/&gt;</code>
-    <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>General test case #5</dt>
+    &rarr; <code>&lt;http://example/a/b/&gt;</code></dd>
   <dd><code>&lt;http://example/a/b/c/d/../../../../e&gt;</code>
-    &rarr; <code>&lt;http://example/e&gt;</code>
-    <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>General test case #6</dt>
+    &rarr; <code>&lt;http://example/e&gt;</code></dd>
   <dd><code>&lt;http://example/a/b/c/d/../.././../../e&gt;</code>
-    &rarr; <code>&lt;http://example/e&gt;</code>
-    <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
-  <dt>General test case #7</dt>
+    &rarr; <code>&lt;http://example/e&gt;</code></dd>
   <dd><code>&lt;http://example/a/b/../.././../../e&gt;</code>
     &rarr; <code>&lt;http://example/e&gt;</code>
     <span class="remark">From Haskell <code>network-uri</code> <a href="#hs-network-uri">[6]</a></span></dd>
@@ -1769,10 +1753,10 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <h3 id="uri-to-iri-conversion">URI to IRI conversion</h3>
 <p>Using <a href="#uri-%3Eiri"><code>uri->iri</code></a>:
 <dl class="test-cases">
-  <dt>Wholly escaped path normalized</dt>
+  <dt>Wholly escaped path is decoded</dt>
   <dd><code>&lt;https://en.wiktionary.org/wiki/%E1%BF%AC%CF%8C%CE%B4%CE%BF%CF%82&gt;</code>
     &rarr; <code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code></dd>
-  <dt>Partially escaped path normalized</dt>
+  <dt>Partially escaped path is decoded</dt>
   <dd><code>&lt;https://example.org/ceol/%C3%89irigh'sCuirOrtDoChuid%C3%89adaigh&gt;</code>
     &rarr; <code>&lt;https://example.org/ceol/Éirigh'sCuirOrtDoChuidÉadaigh&gt;</code></dd>
 </dl>
@@ -1780,10 +1764,10 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <h3 id="iri-to-uri-conversion">IRI to URI conversion</h3>
 <p>Using <a href="#iri-%3Euri"><code>iri->uri</code></a>:
 <dl class="test-cases">
-  <dt>Wholly escaped path normalized</dt>
+  <dt>Wholly escapable path is wholly escaped</dt>
   <dd><code>&lt;https://en.wiktionary.org/wiki/Ῥόδος&gt;</code>
     &rarr; <code>&lt;https://en.wiktionary.org/wiki/%E1%BF%AC%CF%8C%CE%B4%CE%BF%CF%82&gt;</code></dd>
-  <dt>Partially escapable path escaped</dt>
+  <dt>Partially escapable path is wholly escaped</dt>
   <dd><code>&lt;https://example.org/ceol/Éirigh'sCuirOrtDoChuidÉadaigh&gt;</code>
     &rarr; <code>&lt;https://example.org/ceol/%C3%89irigh'sCuirOrtDoChuid%C3%89adaigh&gt;</code></dd>
 </dl>
@@ -1927,7 +1911,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 </dl>
 
 <h3 id="test-relativization">Relativization with respect to base</h3>
-<p>The <a href="#relativize-iri"><code>relativize-iri</code></a> and <a href="#relativize-uri"><code>relativize-uri</code></a> procedures are effectively the inverse of <a href="#resolve-iri"><code>resolve-iri</code></a> and <a href="#resolve-uri"><code>resolve-uri</code></a>. However, not all of the test cases described above succeed verbatim, as e.g. the references may include dotted segments which would be normalized during the relative reference resolution process. Of the test cases descibed above, we specifically require that the <a href="#uriswap-cases">test cases derived from the Python SWAP</a> project as all of these test cases are invertible exactly.</p>
+<p>The <a href="#relativize-iri"><code>relativize-iri</code></a> and <a href="#relativize-uri"><code>relativize-uri</code></a> procedures are effectively the inverse of <a href="#resolve-iri"><code>resolve-iri</code></a> and <a href="#resolve-uri"><code>resolve-uri</code></a>. However, not all of the test cases described above succeed verbatim, as e.g. the references may include dotted segments which would be normalized during the relative reference resolution process. Of the test cases described above, we specifically require that the <a href="#uriswap-cases">test cases derived from the Python SWAP</a> project as all of these test cases are invertible exactly.</p>
 <p>Recall that test data above are formatted as a base URI or IRI, a relative reference, and an expected result of reference resolution. A test of relativization succeeds if given the base IRI or URI and the expected result of resolution, the relative reference is produced. As for the reference resolution cases, the test cases are expected to succeed verbatim for both IRIs and URIs, but only a &ldquo;base IRI&rdquo; is described for brevity.</p>
 <p>The following inversion must hold, but note that we elicit relative reference <code>&lt;/g&gt;</code>, which is only the same as previous reference <code>&lt;.//g&gt;</code> after calling <a href="#remove-dot-segments">remove-dot-segments</a>.</p>
 <dl class="test-cases">
@@ -1945,7 +1929,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
   <dd><code>&lt;http://a/&gt;</code> &rarr; <code>&lt;../..&gt;</code></dd>
   <dt>No relative representation possible</dt>
   <dd><code>&lt;http://a&gt;</code> &rarr; <code>&lt;//a&gt;</code></dd>
-  <dt>Identical scheme elicits output resolved identifier</dt>
+  <dt>Identical scheme elicits the resolved identifier</dt>
   <dd><code>&lt;ftp://a/b/c/d;p?q&gt;</code> &rarr; <code>&lt;ftp://a/b/c/d;p?q&gt;</code></dd>
   <dd><code>&lt;ftp://x/y/z;a?b&gt;</code> &rarr; <code>&lt;ftp://x/y/z;a?b&gt;</code></dd>
   <dt>General test cases</dt>
@@ -2171,7 +2155,7 @@ example-IRI &rarr; &lt;http://example.org:80/ex#IRI&gt;
 <h2 id="acknowledgements">Acknowledgements</h2>
 
 <p>Thanks to Ivan Raikov and Peter Bex for suggestions on improvements, especially with respect to rejecting invalid UTF-8 sequences, and the relativization procedures.</p>
-<p>The majority of test cases beyond RFC 3986 and 3987 are drawn from Graham Klyne's <code>network-uri</code> Haskell library <a href="#hs-network-uri">[6]</a>, with additional test cases from the Chicken <code>uri-generic</code> library <a href="#chicken-uri-generic">[7]</a> suggested by Peter Bex and Ivan Raikov during the SRFI drafting process.</p>
+<p>The majority of test cases beyond RFC 3986 and 3987 are drawn from Graham Klyne&rsquo;s <code>network-uri</code> Haskell library <a href="#hs-network-uri">[6]</a>, with additional test cases from the Chicken <code>uri-generic</code> library <a href="#chicken-uri-generic">[7]</a> suggested by Peter Bex and Ivan Raikov during the SRFI drafting process.</p>
 <p>HTML formatting is derived from SRFI 276 by Peter McGoron.</p>
 
 <h2 id="copyright">Copyright</h2>
