@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: MIT
 #!r6rs
-(library (iri internal resource-identifier)
+(library (srfi :275 internal resource-identifier)
   (export ;; resource-identifier record type
           resource-identifier resource-identifier? make-resource-identifier
           resource-identifier-raw-scheme set-resource-identifier-raw-scheme!
@@ -43,8 +43,8 @@
           (only (srfi :1 lists) list-copy)
           (only (srfi :160 u16) u16vector? u16vector= u16vector-copy)
           (srfi :262 match)
-          (iri internal path)
-          (iri internal utils))
+          (srfi :275 internal path)
+          (srfi :275 internal utils))
 
   (define-record-type resource-identifier/par)
 

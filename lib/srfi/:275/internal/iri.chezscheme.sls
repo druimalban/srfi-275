@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: MIT
 #!r6rs
-(library (iri internal iri)
+(library (srfi :275 internal iri)
   (export ;; record types
           iri non-relative-iri? make-raw-iri
           relative-iri relative-iri? make-raw-relative-iri
@@ -49,13 +49,13 @@
           (only (srfi :152 strings) reverse-list->string string-null? string-any string-every)
           (srfi :160 u16)
           (srfi :262 match)
-          (iri internal resource-identifier)
-          (except (iri internal utils)
+          (srfi :275 internal resource-identifier)
+          (except (srfi :275 internal utils)
                   char-set:uri char-set:uri-pchar-unescaped
                   char-set:uri-userinfo char-set:uri-reg-name
                   char-set:uri-segment
                   char-set:uri-query char-set:uri-fragment)
-          (rename (iri internal resource-identifier)
+          (rename (srfi :275 internal resource-identifier)
                   (resource-identifier-raw-scheme raw-scheme)
                   (resource-identifier-raw-user raw-user)
                   (resource-identifier-raw-host raw-host)
@@ -79,7 +79,7 @@
                   (set-relative-reference-raw-host! set-reference-raw-host!)
                   (set-relative-reference-raw-query! set-reference-raw-query!)
                   (set-relative-reference-raw-fragment! set-reference-raw-fragment!))
-          (iri internal path))
+          (srfi :275 internal path))
 
   (define-record-type (iri make-raw-iri non-relative-iri?)
     (parent resource-identifier)

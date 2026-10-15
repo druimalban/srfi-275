@@ -86,7 +86,7 @@
    such an URI or IRI, so the means by which this is tested is not portable,
    as it relies on the internal constructors.
 |#
-(import (only (iri internal resource-identifier)
+(import (only (srfi :275 internal resource-identifier)
               resource-identifier-raw-scheme
               resource-identifier-raw-user
               resource-identifier-raw-host
@@ -100,9 +100,9 @@
               relative-reference-path
               relative-reference-raw-query
               relative-reference-raw-fragment)
-        (only (iri internal iri)
+        (only (srfi :275 internal iri)
               make-raw-relative-iri make-raw-iri)
-        (only (iri internal uri)
+        (only (srfi :275 internal uri)
               make-raw-relative-uri make-raw-uri))
 
 (include "test/test-normalize.scm")

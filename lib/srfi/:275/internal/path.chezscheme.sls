@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: MIT
 #!r6rs
-(library (iri internal path)
+(library (srfi :275 internal path)
   (export path? path-raw-segments path-segments
           relative-path make-raw-relative-path empty-path
           absolute-path make-raw-absolute-path empty-absolute-path
@@ -46,7 +46,7 @@
                 string-join string-null? string-every string-any)
           (srfi :160 u16)
           (srfi :262 match)
-          (iri internal utils))
+          (srfi :275 internal utils))
 
   (define-record-type path
     (fields (mutable raw-segments path-raw-segments set-path-raw-segments!))

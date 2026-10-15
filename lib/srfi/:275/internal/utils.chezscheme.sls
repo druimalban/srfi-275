@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: MIT
 #!r6rs
-(library (iri internal utils)
+(library (srfi :275 internal utils)
   (export compose identity
           raise-overlong utf8->string/raise
           u8-list->char

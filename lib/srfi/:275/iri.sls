@@ -36,12 +36,12 @@
   (import (rnrs base (6))
           (only (rnrs control (6)) case-lambda)
           (only (rnrs io simple (6)) eof-object)
-          (prefix (only (iri internal iri)
+          (prefix (only (srfi :275 internal iri)
                         get-iri get-non-relative-iri get-rfc3987-absolute-iri)
                   ex:)
-          (except (iri internal iri)
+          (except (srfi :275 internal iri)
                   get-iri get-non-relative-iri get-rfc3987-absolute-iri)
-          (iri internal utils))
+          (srfi :275 internal utils))
 
   (define get-iri
     (case-lambda

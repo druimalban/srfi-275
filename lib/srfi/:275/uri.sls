@@ -36,12 +36,12 @@
   (import (rnrs base (6))
           (only (rnrs control (6)) case-lambda)
           (only (rnrs io simple (6)) eof-object)
-          (prefix (only (iri internal uri)
+          (prefix (only (srfi :275 internal uri)
                         get-uri get-non-relative-uri get-rfc3986-absolute-uri)
                   ex:)
-          (except (iri internal uri)
+          (except (srfi :275 internal uri)
                   get-uri get-non-relative-uri get-rfc3986-absolute-uri)
-          (iri internal utils))
+          (srfi :275 internal utils))
 
   (define get-uri
     (case-lambda

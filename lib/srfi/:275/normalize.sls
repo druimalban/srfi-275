@@ -20,4 +20,4 @@
           ;; conversion and equivalence
           uri->iri
           iri->uri)
-  (import (iri internal normalize)))
+  (import (srfi :275 internal normalize)))

@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: MIT
 #!r6rs
-(library (iri internal normalize)
+(library (srfi :275 internal normalize)
   (export ;; normalization, reference resolution and comparison
           normalize-iri-case! normalize-iri-escape! normalize-iri-path! normalize-iri!
           normalize-iri-case normalize-iri-escape normalize-iri-path normalize-iri
@@ -30,7 +30,7 @@
           (srfi :14 char-sets)
           (srfi :160 u16)
           (srfi :262 match)
-          (rename (iri internal resource-identifier)
+          (rename (srfi :275 internal resource-identifier)
                   (resource-identifier-raw-scheme raw-scheme)
                   (resource-identifier-raw-user raw-user)
                   (resource-identifier-raw-host raw-host)
@@ -51,10 +51,10 @@
                   (set-relative-reference-raw-host! set-raw-host!/ref)
                   (set-relative-reference-raw-query! set-raw-query!/ref)
                   (set-relative-reference-raw-fragment! set-raw-fragment!/ref))
-          (iri internal utils)
-          (iri internal path)
-          (iri internal iri)
-          (iri internal uri))
+          (srfi :275 internal utils)
+          (srfi :275 internal path)
+          (srfi :275 internal iri)
+          (srfi :275 internal uri))
 
   #|
      We can rely on this working for both URIs and IRIs because in UTF-8,

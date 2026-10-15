@@ -19,4 +19,4 @@
           remove-dot-segments merge-paths
           build-path
           char-set:path)
-  (import (iri internal path)))
+  (import (srfi :275 internal path)))
