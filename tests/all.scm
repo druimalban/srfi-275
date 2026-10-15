@@ -3,7 +3,13 @@
 ;;; SPDX-License-Identifier: MIT
 #!r6rs
 
-(import (srfi :14 char-sets)
+#|
+   Run this at the top-level of the SRFI repository, e.g.
+   (load "tests/all.scm") in the Chez Scheme REPL.
+|#
+
+(import (rnrs (6))
+        (srfi :14 char-sets)
         (srfi :64 testing)
         (srfi :152 strings)
         (srfi :262 match)
@@ -12,7 +18,9 @@
         (srfi :275 uri)
         (srfi :275 normalize)
         (srfi :275 path)
-        (srfi :275 utils))
+        (srfi :275 utils)
+        
+        (only (chezscheme) include))
 
 #| Inline internal utility procedures which aren't exported
    in the (srfi :275 xxx) namespace: |#
@@ -71,12 +79,12 @@
    The first six test suite sections are portable, and only depend on the
    exports defined in the (srfi :275 xxx) sub-libraries:
 |#
-(include "test/test-misc.scm")
-(include "test/test-parse-segment.scm")
-(include "test/test-escaped.scm")
-(include "test/test-path.scm")
-(include "test/test-relative.scm")
-(include "test/test-setters.scm")
+(include "tests/test-misc.scm")
+(include "tests/test-parse-segment.scm")
+(include "tests/test-escaped.scm")
+(include "tests/test-path.scm")
+(include "tests/test-relative.scm")
+(include "tests/test-setters.scm")
 
 #|
    In contrast, the following two test suite section is not portable.
@@ -105,4 +113,4 @@
         (only (srfi :275 internal uri)
               make-raw-relative-uri make-raw-uri))
 
-(include "test/test-normalize.scm")
+(include "tests/test-normalize.scm")
